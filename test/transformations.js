@@ -25,7 +25,7 @@
     });
 
     test('htmlToText', function () {
-        equal(domExtractor.transformations.htmlToText.call(window, '&amp;'), '&', 'converts html entities');
+        equal(domExtractor.transformations.htmlToText('&amp;'), '&', 'converts html entities');
     });
 
     test('toString', function () {

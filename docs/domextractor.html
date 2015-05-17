@@ -30,46 +30,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-
-    <span class="hljs-keyword">var</span> isString = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(arg)</span> </span>{
-            <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> arg === <span class="hljs-string">'string'</span>;
-        },
-        isNumber = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(arg)</span> </span>{
-            <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> arg === <span class="hljs-string">'number'</span>;
-        },
-        isFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(arg)</span> </span>{
-            <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> arg === <span class="hljs-string">'function'</span>;
-        },
-        isArray = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(arg)</span> </span>{
-            <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>.isArray ? <span class="hljs-built_in">Array</span>.isArray(arg) : <span class="hljs-built_in">Object</span>.prototype.toString.call(arg) === <span class="hljs-string">'[object Array]'</span>;
-        },
-        stringIsRegExp = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(string)</span> </span>{
-            <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^\/(\S|\s)*\/[gimy]{0,4}$/</span>.test(string);
-        },
-        toRegExp = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(pattern)</span> </span>{
-            <span class="hljs-keyword">var</span> patternArray = pattern.split(<span class="hljs-string">'/'</span>);
-            <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(patternArray[<span class="hljs-number">1</span>], patternArray[<span class="hljs-number">2</span>]);
-        },
-        mapObject = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(object, func)</span> </span>{
-            <span class="hljs-keyword">var</span> key, newObject = {};
-            <span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> object) {
-                <span class="hljs-keyword">if</span> (object.hasOwnProperty(key)) {
-                    newObject[key] = func(key, object[key]);
-                }
-            }
-            <span class="hljs-keyword">return</span> newObject;
-        },
-        filterObject = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(object, func)</span> </span>{
-            <span class="hljs-keyword">var</span> key, newObject = {};
-            <span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> object) {
-                <span class="hljs-keyword">if</span> (object.hasOwnProperty(key) &amp;&amp; func(key, object[key])) {
-                    newObject[key] = object[key];
-                }
-            }
-            <span class="hljs-keyword">return</span> newObject;
-        },
-        transformations = {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{</pre></div></div>
             
         </li>
         
@@ -80,34 +41,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>DOM node transformations</p>
+              <p>Establish the root object, <code>window</code> (<code>self</code>) in the browser.
+We use <code>self</code> instead of <code>window</code> for <code>WebWorker</code> support.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            querySelectorAll: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(selector)</span> </span>{
-                <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(node)</span> </span>{
-                    <span class="hljs-keyword">return</span> node &amp;&amp; node.querySelectorAll(selector);
-                };
-            },
-            querySelector: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(selector)</span> </span>{
-                <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(node)</span> </span>{
-                    <span class="hljs-keyword">return</span> node &amp;&amp; node.querySelector(selector);
-                };
-            },
-            innerHTML: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(node)</span> </span>{
-                <span class="hljs-keyword">return</span> node &amp;&amp; node.innerHTML;
-            },
-            innerText: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(node)</span> </span>{
-                <span class="hljs-keyword">return</span> node &amp;&amp; (node.innerText || node.textContent);
-            },
-            value: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(node)</span> </span>{
-                <span class="hljs-keyword">return</span> node &amp;&amp; node.value;
-            },
-            getAttribute: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(attr)</span> </span>{
-                <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(node)</span> </span>{
-                    <span class="hljs-keyword">return</span> node &amp;&amp; node.getAttribute &amp;&amp; node.getAttribute(attr);
-                };
-            },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> root = <span class="hljs-keyword">typeof</span> self === <span class="hljs-string">'object'</span> &amp;&amp; self.self === self &amp;&amp; self;</pre></div></div>
             
         </li>
         
@@ -118,24 +57,47 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Number transformations</p>
+              <p>Transformation helper functions</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            toInt: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
-                <span class="hljs-keyword">return</span> isString(item) &amp;&amp; <span class="hljs-built_in">parseInt</span>(item, <span class="hljs-number">10</span>);
-            },
-            toFloat: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
-                <span class="hljs-keyword">return</span> isString(item) &amp;&amp; <span class="hljs-built_in">parseFloat</span>(item);
-            },
-            round: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
-                <span class="hljs-keyword">return</span> isNumber(item) &amp;&amp; <span class="hljs-built_in">Math</span>.round(item);
-            },
-            multiplyBy: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(factor)</span> </span>{
-                <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(number)</span> </span>{
-                    <span class="hljs-keyword">return</span> isNumber(number) &amp;&amp; factor * number;
-                };
-            },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> isString = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(arg)</span> </span>{
+			<span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> arg === <span class="hljs-string">'string'</span>;
+		},
+		isNumber = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(arg)</span> </span>{
+			<span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> arg === <span class="hljs-string">'number'</span>;
+		},
+		isFunction = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(arg)</span> </span>{
+			<span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> arg === <span class="hljs-string">'function'</span>;
+		},
+		isArray = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(arg)</span> </span>{
+			<span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>.isArray ? <span class="hljs-built_in">Array</span>.isArray(arg) : <span class="hljs-built_in">Object</span>.prototype.toString.call(arg) === <span class="hljs-string">'[object Array]'</span>;
+		},
+		stringIsRegExp = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(string)</span> </span>{
+			<span class="hljs-keyword">return</span> <span class="hljs-regexp">/^\/(\S|\s)*\/[gimy]{0,4}$/</span>.test(string);
+		},
+		toRegExp = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(pattern)</span> </span>{
+			<span class="hljs-keyword">var</span> patternArray = pattern.split(<span class="hljs-string">'/'</span>);
+			<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">RegExp</span>(patternArray[<span class="hljs-number">1</span>], patternArray[<span class="hljs-number">2</span>]);
+		},
+		mapObject = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(object, func)</span> </span>{
+			<span class="hljs-keyword">var</span> key, newObject = {};
+			<span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> object) {
+				<span class="hljs-keyword">if</span> (object.hasOwnProperty(key)) {
+					newObject[key] = func(key, object[key]);
+				}
+			}
+			<span class="hljs-keyword">return</span> newObject;
+		},
+		filterObject = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(object, func)</span> </span>{
+			<span class="hljs-keyword">var</span> key, newObject = {};
+			<span class="hljs-keyword">for</span> (key <span class="hljs-keyword">in</span> object) {
+				<span class="hljs-keyword">if</span> (object.hasOwnProperty(key) &amp;&amp; func(key, object[key])) {
+					newObject[key] = object[key];
+				}
+			}
+			<span class="hljs-keyword">return</span> newObject;
+		};</pre></div></div>
             
         </li>
         
@@ -146,42 +108,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>String transformations</p>
+              <p>DomExtractor transformations</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            htmlToText: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(html)</span> </span>{
-                <span class="hljs-keyword">var</span> div = <span class="hljs-keyword">this</span>.document.createElement(<span class="hljs-string">'div'</span>);
-                div.innerHTML = html;
-                <span class="hljs-keyword">return</span> div.firstChild.nodeValue + <span class="hljs-built_in">String</span>();
-            },
-            toString: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
-                <span class="hljs-keyword">return</span> item + <span class="hljs-built_in">String</span>();
-            },
-            trim: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(text)</span> </span>{
-                <span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.trim();
-            },
-            split: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(delimeter, limit)</span> </span>{
-                <span class="hljs-keyword">var</span> args = [delimeter];
-                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> limit !== <span class="hljs-string">'undefined'</span>) {
-                    args.push(<span class="hljs-built_in">parseInt</span>(limit, <span class="hljs-number">10</span>));
-                }
-                <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(text)</span> </span>{
-                    <span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.split.apply(text, args);
-                };
-            },
-            replace: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(pattern, replacement)</span> </span>{
-                pattern = isString(pattern) &amp;&amp; stringIsRegExp(pattern) ? toRegExp(pattern) : pattern;
-                <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(text)</span> </span>{
-                    <span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.replace(pattern, replacement);
-                };
-            },
-            match: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(pattern)</span> </span>{
-                pattern = isString(pattern) &amp;&amp; stringIsRegExp(pattern) ? toRegExp(pattern) : pattern;
-                <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(text)</span> </span>{
-                    <span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.match(pattern);
-                };
-            },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> transformations = {</pre></div></div>
             
         </li>
         
@@ -192,36 +123,34 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Array transformations</p>
+              <p>DOM node transformations</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            getIndex: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(index)</span> </span>{
-                index = <span class="hljs-built_in">parseInt</span>(index, <span class="hljs-number">10</span>);
-                <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(array)</span> </span>{
-                    <span class="hljs-keyword">return</span> isArray(array) &amp;&amp; array.length &gt; index &amp;&amp; array[index];
-                };
-            },
-            slice: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(start, stop)</span> </span>{
-                <span class="hljs-keyword">var</span> args = [<span class="hljs-built_in">parseInt</span>(start, <span class="hljs-number">10</span>)];
-                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> stop !== <span class="hljs-string">'undefined'</span>) {
-                    args.push(<span class="hljs-built_in">parseInt</span>(stop, <span class="hljs-number">10</span>));
-                }
-                <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(array)</span> </span>{
-                    <span class="hljs-keyword">return</span> array.slice.apply(array, args);
-                };
-            }
-        },
-        DomExtractor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(rootNode, config)</span> </span>{
-            <span class="hljs-keyword">if</span> (!(<span class="hljs-keyword">this</span> <span class="hljs-keyword">instanceof</span> DomExtractor)) {
-                <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> DomExtractor(rootNode, config);
-            }
-            <span class="hljs-keyword">this</span>.rootNode = rootNode;
-            <span class="hljs-keyword">this</span>.document = <span class="hljs-keyword">this</span>.rootNode.ownerDocument || <span class="hljs-keyword">this</span>.rootNode;
-            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.extract(config);
-        };
-
-    DomExtractor.prototype.transformations = DomExtractor.transformations = transformations;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		querySelectorAll: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(selector)</span> </span>{
+			<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(node)</span> </span>{
+				<span class="hljs-keyword">return</span> node &amp;&amp; node.querySelectorAll(selector);
+			};
+		},
+		querySelector: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(selector)</span> </span>{
+			<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(node)</span> </span>{
+				<span class="hljs-keyword">return</span> node &amp;&amp; node.querySelector(selector);
+			};
+		},
+		innerHTML: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(node)</span> </span>{
+			<span class="hljs-keyword">return</span> node &amp;&amp; node.innerHTML;
+		},
+		innerText: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(node)</span> </span>{
+			<span class="hljs-keyword">return</span> node &amp;&amp; (node.innerText || node.textContent);
+		},
+		value: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(node)</span> </span>{
+			<span class="hljs-keyword">return</span> node &amp;&amp; node.value;
+		},
+		getAttribute: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(attr)</span> </span>{
+			<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(node)</span> </span>{
+				<span class="hljs-keyword">return</span> node &amp;&amp; node.getAttribute &amp;&amp; node.getAttribute(attr);
+			};
+		},</pre></div></div>
             
         </li>
         
@@ -232,22 +161,24 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Extract and format data from the DOM based on config</p>
+              <p>Number transformations</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    DomExtractor.prototype.extract = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(config)</span> </span>{
-        <span class="hljs-keyword">var</span> _this = <span class="hljs-keyword">this</span>;
-        <span class="hljs-keyword">var</span> memoizedSelections = {};
-
-        <span class="hljs-keyword">var</span> filteredConfig = filterObject(config, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(key, spec)</span> </span>{
-            <span class="hljs-keyword">return</span> !spec.condition || spec.condition();
-        });
-
-        <span class="hljs-keyword">var</span> extractFromDOM = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(key, spec)</span> </span>{
-            <span class="hljs-keyword">var</span> output = _this.rootNode;
-
-            <span class="hljs-keyword">if</span> (spec.selector) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		toInt: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
+			<span class="hljs-keyword">return</span> isString(item) &amp;&amp; <span class="hljs-built_in">parseInt</span>(item, <span class="hljs-number">10</span>);
+		},
+		toFloat: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
+			<span class="hljs-keyword">return</span> isString(item) &amp;&amp; <span class="hljs-built_in">parseFloat</span>(item);
+		},
+		round: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
+			<span class="hljs-keyword">return</span> isNumber(item) &amp;&amp; <span class="hljs-built_in">Math</span>.round(item);
+		},
+		multiplyBy: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(factor)</span> </span>{
+			<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(number)</span> </span>{
+				<span class="hljs-keyword">return</span> isNumber(number) &amp;&amp; factor * number;
+			};
+		},</pre></div></div>
             
         </li>
         
@@ -258,23 +189,42 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Don’t query the DOM for the same selector again</p>
+              <p>String transformations</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">if</span> (!memoizedSelections.hasOwnProperty(spec.selector)) {
-                    memoizedSelections[spec.selector] = output.querySelector(spec.selector);
-                }
-                output = memoizedSelections[spec.selector];
-            }
-
-            <span class="hljs-keyword">if</span> (spec.transformations) {
-                output = _this.applyTransformations(spec.transformations, output);
-            }
-            <span class="hljs-keyword">return</span> output;
-        };
-        <span class="hljs-keyword">return</span> mapObject(filteredConfig, extractFromDOM);
-    };</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		htmlToText: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(html)</span> </span>{
+			<span class="hljs-keyword">var</span> div = root.document.createElement(<span class="hljs-string">'div'</span>);
+			div.innerHTML = html;
+			<span class="hljs-keyword">return</span> div.firstChild.nodeValue + <span class="hljs-built_in">String</span>();
+		},
+		toString: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
+			<span class="hljs-keyword">return</span> item + <span class="hljs-built_in">String</span>();
+		},
+		trim: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(text)</span> </span>{
+			<span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.trim();
+		},
+		split: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(delimeter, limit)</span> </span>{
+			<span class="hljs-keyword">var</span> args = [delimeter];
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> limit !== <span class="hljs-string">'undefined'</span>) {
+				args.push(<span class="hljs-built_in">parseInt</span>(limit, <span class="hljs-number">10</span>));
+			}
+			<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(text)</span> </span>{
+				<span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.split.apply(text, args);
+			};
+		},
+		replace: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(pattern, replacement)</span> </span>{
+			pattern = isString(pattern) &amp;&amp; stringIsRegExp(pattern) ? toRegExp(pattern) : pattern;
+			<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(text)</span> </span>{
+				<span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.replace(pattern, replacement);
+			};
+		},
+		match: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(pattern)</span> </span>{
+			pattern = isString(pattern) &amp;&amp; stringIsRegExp(pattern) ? toRegExp(pattern) : pattern;
+			<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(text)</span> </span>{
+				<span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.match(pattern);
+			};
+		},</pre></div></div>
             
         </li>
         
@@ -285,17 +235,26 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>If a transformation has static arguments, use them to make a transformation
-function to apply to the item</p>
+              <p>Array transformations</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    DomExtractor.prototype.parseTransformation = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(transformationString)</span> </span>{
-        <span class="hljs-keyword">var</span> transformationArray = transformationString.split(<span class="hljs-string">':'</span>);
-        <span class="hljs-keyword">var</span> transformationName = transformationArray.shift();
-        <span class="hljs-keyword">var</span> transformationArgs = transformationArray.join(<span class="hljs-string">':'</span>).split(<span class="hljs-string">','</span>);
-        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.transformations[transformationName].apply(<span class="hljs-keyword">this</span>, transformationArgs);
-    };</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		getIndex: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(index)</span> </span>{
+			index = <span class="hljs-built_in">parseInt</span>(index, <span class="hljs-number">10</span>);
+			<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(array)</span> </span>{
+				<span class="hljs-keyword">return</span> isArray(array) &amp;&amp; array.length &gt; index &amp;&amp; array[index];
+			};
+		},
+		slice: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(start, stop)</span> </span>{
+			<span class="hljs-keyword">var</span> args = [<span class="hljs-built_in">parseInt</span>(start, <span class="hljs-number">10</span>)];
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> stop !== <span class="hljs-string">'undefined'</span>) {
+				args.push(<span class="hljs-built_in">parseInt</span>(stop, <span class="hljs-number">10</span>));
+			}
+			<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(array)</span> </span>{
+				<span class="hljs-keyword">return</span> array.slice.apply(array, args);
+			};
+		}
+	};</pre></div></div>
             
         </li>
         
@@ -306,26 +265,17 @@ function to apply to the item</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Apply each transformation to the item, in series</p>
+              <p>Allow usage as a function without <code>new</code> operator</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    DomExtractor.prototype.applyTransformations = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(transformations, item)</span> </span>{
-        <span class="hljs-keyword">var</span> i, transformation;
-        <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; transformations.length; i += <span class="hljs-number">1</span>) {
-            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.transformations.hasOwnProperty(transformations[i])) {
-                item = <span class="hljs-keyword">this</span>.transformations[transformations[i]](item);
-            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.transformations.hasOwnProperty(transformations[i].split(<span class="hljs-string">':'</span>, <span class="hljs-number">1</span>)[<span class="hljs-number">0</span>])) {
-                transformation = <span class="hljs-keyword">this</span>.parseTransformation(transformations[i]);
-                item = transformation(item);
-            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (isFunction(transformations[i])) {
-                item = transformations[i](item);
-            } <span class="hljs-keyword">else</span> {
-                <span class="hljs-keyword">throw</span> <span class="hljs-string">'Transformation '</span> + transformations[i] + <span class="hljs-string">' not implemented'</span>;
-            }
-        }
-        <span class="hljs-keyword">return</span> item;
-    };</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">var</span> DomExtractor = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(rootNode, config)</span> </span>{
+		<span class="hljs-keyword">if</span> (!(<span class="hljs-keyword">this</span> <span class="hljs-keyword">instanceof</span> DomExtractor)) {
+			<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> DomExtractor(rootNode, config);
+		}
+		<span class="hljs-keyword">this</span>.rootNode = rootNode;
+		<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.extract(config);
+	};</pre></div></div>
             
         </li>
         
@@ -336,19 +286,149 @@ function to apply to the item</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>Establish the root object, <code>window</code> (<code>self</code>) in the browser.
-We use <code>self</code> instead of <code>window</code> for <code>WebWorker</code> support.</p>
+              <p>Put transformations on DomExtractor object for global referencing</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> root = <span class="hljs-keyword">typeof</span> self === <span class="hljs-string">'object'</span> &amp;&amp; self.self === self &amp;&amp; self;
-    root.domExtractor = DomExtractor;
+            <div class="content"><div class='highlight'><pre>	DomExtractor.prototype.transformations = DomExtractor.transformations = transformations;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Extract and format data from the DOM based on config</p>
 
-    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">'function'</span> &amp;&amp; define.amd) {
-        define(<span class="hljs-string">'domextractor'</span>, [], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-            <span class="hljs-keyword">return</span> DomExtractor;
-        });
-    }
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	DomExtractor.prototype.extract = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(config)</span> </span>{
+		<span class="hljs-keyword">var</span> _this = <span class="hljs-keyword">this</span>;
+		<span class="hljs-keyword">var</span> memoizedSelections = {};
+
+		<span class="hljs-keyword">var</span> filteredConfig = filterObject(config, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(key, spec)</span> </span>{
+			<span class="hljs-keyword">return</span> !spec.condition || spec.condition();
+		});
+
+		<span class="hljs-keyword">var</span> extractFromDOM = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(key, spec)</span> </span>{
+			<span class="hljs-keyword">var</span> output = _this.rootNode;
+
+			<span class="hljs-keyword">if</span> (spec.selector) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Don’t query the DOM for the same selector again</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>				<span class="hljs-keyword">if</span> (!memoizedSelections.hasOwnProperty(spec.selector)) {
+					memoizedSelections[spec.selector] = output.querySelector(spec.selector);
+				}
+				output = memoizedSelections[spec.selector];
+			}
+
+			<span class="hljs-keyword">if</span> (spec.transformations) {
+				output = _this.applyTransformations(spec.transformations, output);
+			}
+			<span class="hljs-keyword">return</span> output;
+		};
+		<span class="hljs-keyword">return</span> mapObject(filteredConfig, extractFromDOM);
+	};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>If a transformation has static arguments, use them to make a transformation
+function to apply to the item</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	DomExtractor.prototype.parseTransformation = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(transformationString)</span> </span>{
+		<span class="hljs-keyword">var</span> transformationArray = transformationString.split(<span class="hljs-string">':'</span>);
+		<span class="hljs-keyword">var</span> transformationName = transformationArray.shift();
+		<span class="hljs-keyword">var</span> transformationArgs = transformationArray.join(<span class="hljs-string">':'</span>).split(<span class="hljs-string">','</span>);
+		<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.transformations[transformationName].apply(<span class="hljs-literal">null</span>, transformationArgs);
+	};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Apply each transformation to the item, in series</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	DomExtractor.prototype.applyTransformations = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(transformations, item)</span> </span>{
+		<span class="hljs-keyword">var</span> i, transformation;
+		<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; transformations.length; i += <span class="hljs-number">1</span>) {
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.transformations.hasOwnProperty(transformations[i])) {
+				item = <span class="hljs-keyword">this</span>.transformations[transformations[i]](item);
+			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.transformations.hasOwnProperty(transformations[i].split(<span class="hljs-string">':'</span>, <span class="hljs-number">1</span>)[<span class="hljs-number">0</span>])) {
+				transformation = <span class="hljs-keyword">this</span>.parseTransformation(transformations[i]);
+				item = transformation(item);
+			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (isFunction(transformations[i])) {
+				item = transformations[i](item);
+			} <span class="hljs-keyword">else</span> {
+				<span class="hljs-keyword">throw</span> <span class="hljs-string">'Transformation '</span> + transformations[i] + <span class="hljs-string">' not implemented'</span>;
+			}
+		}
+		<span class="hljs-keyword">return</span> item;
+	};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Make the object globally accessable</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	root.domExtractor = DomExtractor;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Define it for AMD</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">'function'</span> &amp;&amp; define.amd) {
+		define(<span class="hljs-string">'domextractor'</span>, [], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+			<span class="hljs-keyword">return</span> DomExtractor;
+		});
+	}
 
 }());</pre></div></div>
             
