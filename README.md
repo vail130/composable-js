@@ -2,7 +2,7 @@
 A JS library to select, transform and format data from the DOM, declaratively.
 
 # Example
-```
+```html
 <div id="qunit-fixture">
     <input type="text" name="a" value="1">
 
@@ -13,8 +13,8 @@ A JS library to select, transform and format data from the DOM, declaratively.
 </div>
 ```
 
-```
-var extractedData = domExtractor(window.document, {
+```js
+var extractedData = window.domExtractor(window.document, {
     divNumber: {
         selector: '#qunit-fixture',
         transformations: [
