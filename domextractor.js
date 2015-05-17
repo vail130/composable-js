@@ -134,7 +134,8 @@
 				args.push(parseInt(stop, 10));
 			}
 			return function (array) {
-				return array.slice.apply(array, args);
+                // Slice needs to work on NodeList instances
+				return Array.prototype.slice.apply(array, args);
 			};
 		}
 	};

@@ -56,6 +56,7 @@
 
     test('slice', function () {
         deepEqual(domExtractor.transformations.slice(-1)(['a', 'b', 'c']), ['c'], 'slices an array');
+        deepEqual(domExtractor.transformations.slice(-1)(document.querySelectorAll('.test-span'))[0].id, 'test-span2', 'slices a NodeList');
     });
 
 }());
