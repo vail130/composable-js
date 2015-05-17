@@ -29,3 +29,8 @@ var extractedData = window.domExtractor(window.document, {
 
 extractedData.divNumber === 1; // true
 ```
+
+# Testing
+```bash
+npm test
+```
