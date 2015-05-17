@@ -42,7 +42,7 @@
             <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> arg === <span class="hljs-string">'function'</span>;
         },
         isArray = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(arg)</span> </span>{
-            <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.prototype.toString.call(arg) === <span class="hljs-string">'[object Array]'</span>;
+            <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>.isArray ? <span class="hljs-built_in">Array</span>.isArray(arg) : <span class="hljs-built_in">Object</span>.prototype.toString.call(arg) === <span class="hljs-string">'[object Array]'</span>;
         },
         stringIsRegExp = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(string)</span> </span>{
             <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^\/(\S|\s)*\/[gimy]{0,4}$/</span>.test(string);
@@ -315,7 +315,7 @@ function to apply to the item</p>
         <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; transformations.length; i += <span class="hljs-number">1</span>) {
             <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.transformations.hasOwnProperty(transformations[i])) {
                 item = <span class="hljs-keyword">this</span>.transformations[transformations[i]](item);
-            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (transformations[i].indexOf(<span class="hljs-string">':'</span>) &gt; -<span class="hljs-number">1</span>) {
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.transformations.hasOwnProperty(transformations[i].split(<span class="hljs-string">':'</span>, <span class="hljs-number">1</span>)[<span class="hljs-number">0</span>])) {
                 transformation = <span class="hljs-keyword">this</span>.parseTransformation(transformations[i]);
                 item = transformation(item);
             } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (isFunction(transformations[i])) {
