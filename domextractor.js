@@ -10,7 +10,7 @@
             return typeof arg === 'function';
         },
         isArray = function (arg) {
-            return Object.prototype.toString.call(arg) === '[object Array]';
+            return Array.isArray ? Array.isArray(arg) : Object.prototype.toString.call(arg) === '[object Array]';
         },
         stringIsRegExp = function (string) {
             return /^\/(\S|\s)*\/[gimy]{0,4}$/.test(string);
@@ -185,7 +185,7 @@
         for (i = 0; i < transformations.length; i += 1) {
             if (this.transformations.hasOwnProperty(transformations[i])) {
                 item = this.transformations[transformations[i]](item);
-            } else if (transformations[i].indexOf(':') > -1) {
+            } else if (this.transformations.hasOwnProperty(transformations[i].split(':', 1)[0])) {
                 transformation = this.parseTransformation(transformations[i]);
                 item = transformation(item);
             } else if (isFunction(transformations[i])) {
