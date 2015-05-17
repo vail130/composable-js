@@ -1,20 +1,41 @@
 (function () {
 
-    var isString = function (text) {
-            return typeof text === 'string';
+    var isString = function (arg) {
+            return typeof arg === 'string';
         },
-        isNumber = function (number) {
-            return typeof number === 'number';
+        isNumber = function (arg) {
+            return typeof arg === 'number';
+        },
+        isFunction = function (arg) {
+            return typeof arg === 'function';
         },
         isArray = function (arg) {
             return Object.prototype.toString.call(arg) === '[object Array]';
         },
         stringIsRegExp = function (string) {
-            return (/^\/(\S|\s)*\/[gimy]{0,4}$/).test(string);
+            return /^\/(\S|\s)*\/[gimy]{0,4}$/.test(string);
         },
         toRegExp = function (pattern) {
             var patternArray = pattern.split('/');
             return new RegExp(patternArray[1], patternArray[2]);
+        },
+        mapObject = function (object, func) {
+            var key, newObject = {};
+            for (key in object) {
+                if (object.hasOwnProperty(key)) {
+                    newObject[key] = func(key, object[key]);
+                }
+            }
+            return newObject;
+        },
+        filterObject = function (object, func) {
+            var key, newObject = {};
+            for (key in object) {
+                if (object.hasOwnProperty(key) && func(key, object[key])) {
+                    newObject[key] = object[key];
+                }
+            }
+            return newObject;
         },
         transformations = {
             // DOM node transformations
@@ -44,6 +65,9 @@
             },
 
             // Number transformations
+            toInt: function (item) {
+                return isString(item) && parseInt(item, 10);
+            },
             toFloat: function (item) {
                 return isString(item) && parseFloat(item);
             },
@@ -60,7 +84,7 @@
             htmlToText: function (html) {
                 var div = this.document.createElement('div');
                 div.innerHTML = html;
-                return (div.firstChild.nodeValue + String());
+                return div.firstChild.nodeValue + String();
             },
             toString: function (item) {
                 return item + String();
@@ -70,7 +94,7 @@
             },
             split: function (delimeter, limit) {
                 var args = [delimeter];
-                if (limit !== undefined) {
+                if (typeof limit !== 'undefined') {
                     args.push(parseInt(limit, 10));
                 }
                 return function (text) {
@@ -97,12 +121,9 @@
                     return isArray(array) && array.length > index && array[index];
                 };
             },
-            toArray: function (list) {
-                return Array.prototype.slice.call(list);
-            },
             slice: function (start, stop) {
                 var args = [parseInt(start, 10)];
-                if (stop !== undefined) {
+                if (typeof stop !== 'undefined') {
                     args.push(parseInt(stop, 10));
                 }
                 return function (array) {
@@ -119,46 +140,56 @@
             return this.extract(config);
         };
 
-	DomExtractor.prototype.transformations = DomExtractor.transformations = transformations;
+    DomExtractor.prototype.transformations = DomExtractor.transformations = transformations;
 
+    // Extract and format data from the DOM based on config
     DomExtractor.prototype.extract = function (config) {
-        var key, spec, output = {}, memoizedSelections = {};
-        for (key in config) {
-            if (config.hasOwnProperty(key)) {
-                spec = config[key];
+        var _this = this;
+        var memoizedSelections = {};
 
-                if (!spec.condition || spec.condition()) {
-                    output[key] = this.rootNode;
+        var filteredConfig = filterObject(config, function (key, spec) {
+            return !spec.condition || spec.condition();
+        });
 
-                    if (spec.selector) {
-                        if (!memoizedSelections.hasOwnProperty(spec.selector)) {
-                            memoizedSelections[spec.selector] = output[key].querySelector(spec.selector);
-                        }
-                        output[key] = memoizedSelections[spec.selector];
-                    }
+        var extractFromDOM = function (key, spec) {
+            var output = _this.rootNode;
 
-                    if (spec.transformations) {
-                        output[key] = this.applyTransformations(spec.transformations, output[key]);
-                    }
+            if (spec.selector) {
+                // Don't query the DOM for the same selector again
+                if (!memoizedSelections.hasOwnProperty(spec.selector)) {
+                    memoizedSelections[spec.selector] = output.querySelector(spec.selector);
                 }
+                output = memoizedSelections[spec.selector];
             }
-        }
-        return output;
+
+            if (spec.transformations) {
+                output = _this.applyTransformations(spec.transformations, output);
+            }
+            return output;
+        };
+        return mapObject(filteredConfig, extractFromDOM);
     };
 
+    // If a transformation has static arguments, use them to make a transformation
+    // function to apply to the item
+    DomExtractor.prototype.parseTransformation = function (transformationString) {
+        var transformationArray = transformationString.split(':');
+        var transformationName = transformationArray.shift();
+        var transformationArgs = transformationArray.join(':').split(',');
+        return this.transformations[transformationName].apply(this, transformationArgs);
+    };
+
+    // Apply each transformation to the item, in series
     DomExtractor.prototype.applyTransformations = function (transformations, item) {
-        var i, transformationArray, transformationName, transformationArgs, transformation;
+        var i, transformation;
         for (i = 0; i < transformations.length; i += 1) {
-            if (typeof transformations[i] === 'function') {
-                item = transformations[i](item);
-            } else if (this.transformations.hasOwnProperty(transformations[i])) {
+            if (this.transformations.hasOwnProperty(transformations[i])) {
                 item = this.transformations[transformations[i]](item);
             } else if (transformations[i].indexOf(':') > -1) {
-                transformationArray = transformations[i].split(':');
-                transformationName = transformationArray.shift();
-                transformationArgs = transformationArray.join(':').split(',');
-                transformation = this.transformations[transformationName].apply(this, transformationArgs);
+                transformation = this.parseTransformation(transformations[i]);
                 item = transformation(item);
+            } else if (isFunction(transformations[i])) {
+                item = transformations[i](item);
             } else {
                 throw 'Transformation ' + transformations[i] + ' not implemented';
             }
@@ -166,22 +197,10 @@
         return item;
     };
 
-    // Establish the root object, `window` (`self`) in the browser, or `global` on the server.
+    // Establish the root object, `window` (`self`) in the browser.
     // We use `self` instead of `window` for `WebWorker` support.
-    var root = (typeof self === 'object' && self.self === self && self) ||
-        (typeof global === 'object' && global.global === global && global);
-
-    // Export the DomExtractor object for **Node.js**, with
-    // backwards-compatibility for their old module API. If we're in
-    // the browser, add `DomExtractor` as a global object.
-    if (typeof exports !== 'undefined') {
-        if (typeof module !== 'undefined' && module.exports) {
-            exports = module.exports = DomExtractor;
-        }
-        exports.domExtractor = DomExtractor;
-    } else {
-        root.domExtractor = DomExtractor;
-    }
+    var root = typeof self === 'object' && self.self === self && self;
+    root.domExtractor = DomExtractor;
 
     if (typeof define === 'function' && define.amd) {
         define('domextractor', [], function () {

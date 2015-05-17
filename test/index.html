@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>DomExtractor Test Suite</title>
-  <link rel="stylesheet" href="vendor/qunit.css" type="text/css" media="screen">
+    <title>DomExtractor Test Suite</title>
+    <link rel="stylesheet" href="vendor/qunit.css" type="text/css" media="screen">
 </head>
 <body>
-  <div id="qunit"></div>
-  <script src="vendor/qunit.js"></script>
-  <script src="vendor/qunit-extras.js"></script>
-  <script src="../domextractor.js"></script>
+<div id="qunit"></div>
 
-  <script src="transformations.js"></script>
+<div id="qunit-fixture">
+    <input type="text" name="a" value="1">
+
+    <div class="test-div" id="test-div1">Test Div 1</div>
+    <div class="test-div" id="test-div2">Test Div 2</div>
+    <span class="test-span" id="test-span1">Test Span 1</span>
+    <span class="test-span" id="test-span2">Test Span 2</span>
+</div>
+
+<script src="vendor/qunit.js"></script>
+<script src="vendor/qunit-extras.js"></script>
+<script src="../domextractor.js"></script>
+
+<script src="transformations.js"></script>
+<script src="extraction.js"></script>
 </body>
 </html>
