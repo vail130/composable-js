@@ -1,2 +1,2 @@
-# dom-extractor-js
+# domextractor
 Lightweight JS library to get values from the DOM.

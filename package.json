@@ -1,0 +1,41 @@
+{
+  "name": "domextractor",
+  "version": "0.1.0",
+  "description": "Lightweight JS library to get values from the DOM.",
+  "main": "domextractor.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vail130/domextractorjs.git"
+  },
+  "keywords": [
+    "javascript",
+    "dom"
+  ],
+  "author": "Vail Gold",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vail130/dom-extractor-js/issues"
+  },
+  "homepage": "https://github.com/vail130/domextractor",
+  "devDependencies": {
+    "docco": "*",
+    "eslint": "0.6.x",
+    "karma": "~0.12.31",
+    "karma-qunit": "~0.1.4",
+    "qunit-cli": "~0.2.0",
+    "uglify-js": "2.4.x"
+  },
+  "scripts": {
+    "test": "npm run test-node && npm run lint",
+    "lint": "eslint domextractor.js test/*.js",
+    "test-node": "qunit-cli test/*.js",
+    "test-browser": "npm i karma-phantomjs-launcher && ./node_modules/karma/bin/karma start",
+    "build": "uglifyjs domextractor.js -c \"evaluate=false\" --comments \"/    .*/\" -m --source-map domextractor.min.map -o domextractor.min.js",
+    "doc": "docco domextractor.js"
+  },
+  "files": [
+    "domextractor.js",
+    "domextractor.min.js",
+    "domextractor.min.map"
+  ]
+}

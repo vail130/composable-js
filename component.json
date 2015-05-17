@@ -1,0 +1,13 @@
+{
+  "name": "domextractor",
+  "description": "Lightweight JS library to get values from the DOM.",
+  "keywords": [
+    "javascript",
+    "dom"
+  ],
+  "repo": "vail130/domextractor",
+  "main": "domextractor.js",
+  "scripts": ["domextractor.js"],
+  "version": "0.1.0",
+  "license": "MIT"
+}
