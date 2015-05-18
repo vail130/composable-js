@@ -230,7 +230,7 @@
         return this.T[transformationName].apply(this, transformationArgs);
     };
 
-    Composable.VERSION = '0.2.0';
+    Composable.VERSION = '0.3.0';
 
     // Make the object globally accessible
     root.Composable = Composable;
