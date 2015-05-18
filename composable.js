@@ -143,7 +143,7 @@
             }
             return function (array) {
                 // Slice needs to work on NodeList instances
-                return Array.prototype.slice.apply(array, args);
+                return array && Array.prototype.slice.apply(array, args);
             };
         },
 
