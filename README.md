@@ -1,5 +1,5 @@
 # domextractor
-A JS library to select, transform and format data from the DOM, declaratively.
+A JS library to select, transform and format data, declaratively.
 
 # Example
 ```html
@@ -14,20 +14,19 @@ A JS library to select, transform and format data from the DOM, declaratively.
 ```
 
 ```js
-var extractedData = window.domExtractor(window.document, {
-    divNumber: {
-        selector: '#qunit-fixture',
-        transformations: [
-            'querySelector:#test-div1',
-            'innerText',
-            'match:/\\d/',
-            'getIndex:0',
-            'toInt'
-        ]
-    }
+var data = window.Composable({
+    divNumber: [
+        'document',
+        'querySelector:#qunit-fixture',
+        'querySelector:#test-div1',
+        'innerText',
+        'match:/\\d/',
+        'getIndex:0',
+        'toInt'
+    ]
 });
 
-extractedData.divNumber === 1; // true
+data.divNumber === 1; // true
 ```
 
 # Testing

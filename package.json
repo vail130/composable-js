@@ -1,22 +1,24 @@
 {
-  "name": "domextractor",
-  "version": "0.1.0",
-  "description": "Lightweight JS library to get values from the DOM.",
-  "main": "domextractor.js",
+  "name": "composable",
+  "version": "0.2.0",
+  "description": "A JS library to select, transform and format data, declaratively.",
+  "main": "composable.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vail130/domextractorjs.git"
+    "url": "https://github.com/vail130/composable-js.git"
   },
   "keywords": [
     "javascript",
-    "dom"
+    "declarative",
+    "dom",
+    "functional"
   ],
   "author": "Vail Gold",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vail130/domextractor/issues"
+    "url": "https://github.com/vail130/composable-js/issues"
   },
-  "homepage": "https://github.com/vail130/domextractor",
+  "homepage": "https://github.com/vail130/composable-js",
   "devDependencies": {
     "docco": "*",
     "eslint": "0.6.x",
@@ -24,14 +26,14 @@
   },
   "scripts": {
     "test": "npm run test-browser && npm run lint",
-    "lint": "eslint domextractor.js test/*.js",
+    "lint": "eslint composable.js test/*.js",
     "test-browser": "open test/index.html",
-    "build": "uglifyjs domextractor.js -c \"evaluate=false\" --comments \"/    .*/\" -m --source-map domextractor.min.map -o domextractor.min.js",
-    "doc": "docco domextractor.js"
+    "build": "uglifyjs composable.js -c \"evaluate=false\" --comments \"/    .*/\" -m --source-map composable.min.map -o composable.min.js",
+    "doc": "docco composable.js"
   },
   "files": [
-    "domextractor.js",
-    "domextractor.min.js",
-    "domextractor.min.map"
+    "composable.js",
+    "composable.min.js",
+    "composable.min.map"
   ]
 }

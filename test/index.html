@@ -16,9 +16,21 @@
     <span class="test-span" id="test-span2">Test Span 2</span>
 </div>
 
+<script>
+    window.testData = {
+        test1: [1, 2, 3],
+        test2: {
+            a: 1,
+            b: 2,
+            c: 3
+        },
+        test3: 11
+    }
+</script>
+
 <script src="vendor/qunit.js"></script>
 <script src="vendor/qunit-extras.js"></script>
-<script src="../domextractor.js"></script>
+<script src="../composable.js"></script>
 
 <script src="transformations.js"></script>
 <script src="extraction.js"></script>

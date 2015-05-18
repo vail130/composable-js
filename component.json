@@ -1,13 +1,15 @@
 {
-  "name": "domextractor",
-  "description": "Lightweight JS library to get values from the DOM.",
+  "name": "composable",
+  "description": "A JS library to select, transform and format data, declaratively.",
   "keywords": [
     "javascript",
-    "dom"
+    "declarative",
+    "dom",
+    "functional"
   ],
-  "repo": "vail130/domextractor",
-  "main": "domextractor.js",
-  "scripts": ["domextractor.js"],
-  "version": "0.1.0",
+  "repo": "vail130/composable-js",
+  "main": "composable.js",
+  "scripts": ["composable.js"],
+  "version": "0.2.0",
   "license": "MIT"
 }
