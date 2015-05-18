@@ -1,4 +1,4 @@
-# domextractor
+# Composable
 A JS library to select, transform and format data, declaratively.
 
 # Example
