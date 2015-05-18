@@ -321,6 +321,20 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
             <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(object)</span> </span>{
                 <span class="hljs-keyword">return</span> object &amp;&amp; object[property];
             };
+        },
+        getProperties: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(propertyString)</span> </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(object)</span> </span>{
+                <span class="hljs-keyword">if</span> (!object) {
+                    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+                }
+                <span class="hljs-keyword">var</span> properties = propertyString.split(<span class="hljs-string">'.'</span>),
+                    property;
+                <span class="hljs-keyword">while</span> (properties.length) {
+                    property = properties.shift();
+                    object = object[property];
+                }
+                <span class="hljs-keyword">return</span> object;
+            };
         }
     };</pre></div></div>
             

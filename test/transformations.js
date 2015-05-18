@@ -71,4 +71,8 @@
         equal(Composable.T.getProperty('a')({a: 1, b: 2}), 1, 'gets value for a property in an object');
     });
 
+    test('getProperties', function () {
+        equal(Composable.T.getProperties('a.b.c')({a: {b: {c: 5}}}), 5, 'gets value for a nested property in an object');
+    });
+
 }());

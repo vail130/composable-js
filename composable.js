@@ -167,6 +167,20 @@
             return function (object) {
                 return object && object[property];
             };
+        },
+        getProperties: function (propertyString) {
+            return function (object) {
+                if (!object) {
+                    return null;
+                }
+                var properties = propertyString.split('.'),
+                    property;
+                while (properties.length) {
+                    property = properties.shift();
+                    object = object[property];
+                }
+                return object;
+            };
         }
     };
 
