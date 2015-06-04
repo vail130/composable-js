@@ -10,7 +10,6 @@
         var extractedData = Composable({
             a: [
                 'document',
-                'querySelector:#qunit-fixture',
                 'querySelector:#test-div1',
                 'innerText',
                 'match:/\\d/',
@@ -23,7 +22,6 @@
         extractedData = Composable({
             a: [
                 T.document,
-                T.querySelector('#qunit-fixture'),
                 T.querySelector('#test-div1'),
                 T.innerText,
                 T.match(/\d/),
@@ -36,9 +34,7 @@
         extractedData = Composable({
             b: [
                 'window',
-                'getProperty:testData',
-                'getProperty:test1',
-                'getIndex:1'
+                'getProperties:testData.test1.1'
             ]
         });
         equal(extractedData.b, 2, 'takes input data and gets properties and indices');

@@ -177,7 +177,7 @@
                     property;
                 while (properties.length) {
                     property = properties.shift();
-                    object = object[property];
+                    object = object ? object[property] : null;
                 }
                 return object;
             };

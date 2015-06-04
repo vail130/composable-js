@@ -11,22 +11,38 @@ A JS library to select, transform and format data, declaratively.
     <span class="test-span" id="test-span1">Test Span 1</span>
     <span class="test-span" id="test-span2">Test Span 2</span>
 </div>
+
+<script>
+    window.testData = {
+        test1: [1, 2, 3],
+        test2: {
+            a: 1,
+            b: 2,
+            c: 3
+        },
+        test3: 11
+    }
+</script>
 ```
 
 ```js
 var data = window.Composable({
     divNumber: [
         'document',
-        'querySelector:#qunit-fixture',
         'querySelector:#test-div1',
         'innerText',
         'match:/\\d/',
         'getIndex:0',
         'toInt'
+    ],
+    testValue: [
+        'window',
+        'getProperties:testData.test1.1',
     ]
 });
 
 data.divNumber === 1; // true
+data.testValue === 2; // true
 ```
 
 # Testing
