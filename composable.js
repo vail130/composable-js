@@ -117,7 +117,7 @@
             return div.firstChild.nodeValue + String();
         },
         toString: function (item) {
-            return item + String();
+            return item ? item + String() : null;
         },
         trim: function (text) {
             return isString(text) && text.trim();
