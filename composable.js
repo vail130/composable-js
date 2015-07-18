@@ -96,10 +96,10 @@
 
         // Number transformations
         toInt: function (item) {
-            return isString(item) && parseInt(item, 10);
+            return (isString(item) || isNumber(item)) && parseInt(item, 10);
         },
         toFloat: function (item) {
-            return isString(item) && parseFloat(item);
+            return (isString(item) || isNumber(item)) && parseFloat(item);
         },
         round: function (item) {
             return isNumber(item) && Math.round(item);

@@ -201,10 +201,10 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
             </div>
             
             <div class="content"><div class='highlight'><pre>        toInt: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
-            <span class="hljs-keyword">return</span> isString(item) &amp;&amp; <span class="hljs-built_in">parseInt</span>(item, <span class="hljs-number">10</span>);
+            <span class="hljs-keyword">return</span> (isString(item) || isNumber(item)) &amp;&amp; <span class="hljs-built_in">parseInt</span>(item, <span class="hljs-number">10</span>);
         },
         toFloat: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
-            <span class="hljs-keyword">return</span> isString(item) &amp;&amp; <span class="hljs-built_in">parseFloat</span>(item);
+            <span class="hljs-keyword">return</span> (isString(item) || isNumber(item)) &amp;&amp; <span class="hljs-built_in">parseFloat</span>(item);
         },
         round: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
             <span class="hljs-keyword">return</span> isNumber(item) &amp;&amp; <span class="hljs-built_in">Math</span>.round(item);
@@ -234,7 +234,7 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
             <span class="hljs-keyword">return</span> div.firstChild.nodeValue + <span class="hljs-built_in">String</span>();
         },
         toString: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(item)</span> </span>{
-            <span class="hljs-keyword">return</span> item + <span class="hljs-built_in">String</span>();
+            <span class="hljs-keyword">return</span> item ? item + <span class="hljs-built_in">String</span>() : <span class="hljs-literal">null</span>;
         },
         trim: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(text)</span> </span>{
             <span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.trim();
@@ -331,7 +331,7 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
                     property;
                 <span class="hljs-keyword">while</span> (properties.length) {
                     property = properties.shift();
-                    object = object[property];
+                    object = object ? object[property] : <span class="hljs-literal">null</span>;
                 }
                 <span class="hljs-keyword">return</span> object;
             };
