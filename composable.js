@@ -21,8 +21,10 @@
             return /^\/(\S|\s)*\/[gimy]{0,4}$/.test(string);
         },
         toRegExp = function (pattern) {
-            var patternArray = pattern.split('/');
-            return new RegExp(patternArray[1], patternArray[2]);
+            var patternParts = pattern.split('/');
+            var flagPart = patternParts[patternParts.length - 1];
+            var patternPart = pattern.slice(1, (flagPart.length + 1) * -1);
+            return new RegExp(patternPart, flagPart);
         },
         mapObject = function (object, func) {
             var key, newObject = {};
@@ -80,33 +82,33 @@
         querySelectorAll: cachedQueryFactory('querySelectorAll'),
         querySelector: cachedQueryFactory('querySelector'),
         innerHTML: function (node) {
-            return node && node.innerHTML;
+            return node ? node.innerHTML : null;
         },
         innerText: function (node) {
-            return node && (node.innerText || node.textContent);
+            return node ? node.innerText || node.textContent : null;
         },
         value: function (node) {
-            return node && node.value;
+            return node ? node.value : null;
         },
         getAttribute: function (attr) {
             return function (node) {
-                return node && node.getAttribute && node.getAttribute(attr);
+                return node && node.getAttribute ? node.getAttribute(attr) : null;
             };
         },
 
         // Number transformations
         toInt: function (item) {
-            return (isString(item) || isNumber(item)) && parseInt(item, 10);
+            return isString(item) || isNumber(item) ? parseInt(item, 10) : null;
         },
         toFloat: function (item) {
-            return (isString(item) || isNumber(item)) && parseFloat(item);
+            return isString(item) || isNumber(item) ? parseFloat(item) : null;
         },
         round: function (item) {
-            return isNumber(item) && Math.round(item);
+            return isNumber(item) ? Math.round(item) : null;
         },
         multiplyBy: function (factor) {
             return function (number) {
-                return isNumber(number) && factor * number;
+                return isNumber(number) ? factor * number : null;
             };
         },
 
@@ -120,7 +122,7 @@
             return item ? item + String() : null;
         },
         trim: function (text) {
-            return isString(text) && text.trim();
+            return isString(text) ? text.trim() : null;
         },
         split: function (delimeter, limit) {
             var args = [delimeter];
@@ -148,7 +150,7 @@
         getIndex: function (index) {
             index = parseInt(index, 10);
             return function (array) {
-                return isArray(array) && array.length > index && array[index];
+                return isArray(array) && array.length > index ? array[index] : null;
             };
         },
         slice: function (start, stop) {
@@ -158,14 +160,14 @@
             }
             return function (array) {
                 // Slice needs to work on NodeList instances
-                return array && Array.prototype.slice.apply(array, args);
+                return array ? Array.prototype.slice.apply(array, args) : null;
             };
         },
 
         // Object transformations
         getProperty: function (property) {
             return function (object) {
-                return object && object[property];
+                return object ? object[property] : null;
             };
         },
         getProperties: function (propertyString) {
@@ -238,7 +240,14 @@
     Composable.prototype.parseTransformation = function (transformationString) {
         var transformationArray = transformationString.split(':');
         var transformationName = transformationArray.shift();
-        var transformationArgs = transformationArray.join(':').split(',');
+        var transformationArgString = transformationArray.join(':');
+
+        var transformationArgs;
+        if (stringIsRegExp(transformationArgString)) {
+            transformationArgs = [transformationArgString];
+        } else {
+            transformationArgs = transformationArgString.split(',');
+        }
 
         // Share context (`this`) between current instance and transformation factory
         return this.T[transformationName].apply(this, transformationArgs);

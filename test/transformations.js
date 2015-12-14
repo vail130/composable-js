@@ -29,7 +29,7 @@
 
     test('multiplyBy', function () {
         equal(Composable.T.multiplyBy(100)(12.34), 1234, 'multiplies by factor provided');
-        equal(Composable.T.multiplyBy(20)('12.54'), false, 'returns false if value provided is not a number');
+        equal(Composable.T.multiplyBy(20)('12.54'), null, 'returns null if value provided is not a number');
     });
 
     test('htmlToText', function () {
@@ -64,7 +64,7 @@
 
     test('slice', function () {
         deepEqual(Composable.T.slice(-1)(['a', 'b', 'c']), ['c'], 'slices an array');
-        deepEqual(Composable.T.slice(-1)(document.querySelectorAll('.test-span'))[0].id, 'test-span2', 'slices a NodeList');
+        deepEqual(Composable.T.slice(-1)(document.querySelectorAll('.test-span'))[0].id, 'test-span3', 'slices a NodeList');
     });
 
     test('getProperty', function () {
