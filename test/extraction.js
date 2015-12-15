@@ -22,10 +22,17 @@
                 'innerText',
                 'match:/Test, Span\/ 3/g',
                 'getIndex:0'
+            ],
+            c: [
+                'document',
+                'querySelector:#test-span3',
+                'innerText',
+                'replace:/Test, Span\/ 3/g,Test Span 3'
             ]
         });
         equal(extractedData.a, 1, 'selects child node, matches part of inner text and parses as int');
         equal(extractedData.b, 'Test, Span/ 3', 'regular expressions work with commas and slashes');
+        equal(extractedData.c, 'Test Span 3', 'regular expression replace works with commas and slashes');
 
         extractedData = Composable({
             a: [

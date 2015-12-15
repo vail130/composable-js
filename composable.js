@@ -18,7 +18,7 @@
             return Array.isArray ? Array.isArray(arg) : Object.prototype.toString.call(arg) === '[object Array]';
         },
         stringIsRegExp = function (string) {
-            return /^\/(\S|\s)*\/[gimy]{0,4}$/.test(string);
+            return /^\/(?:\S|\s)*\/[gimy]{0,4}$/.test(string);
         },
         toRegExp = function (pattern) {
             var patternParts = pattern.split('/');
@@ -242,12 +242,18 @@
         var transformationName = transformationArray.shift();
         var transformationArgString = transformationArray.join(':');
 
-        var transformationArgs;
-        if (stringIsRegExp(transformationArgString)) {
-            transformationArgs = [transformationArgString];
-        } else {
-            transformationArgs = transformationArgString.split(',');
-        }
+        var extractArgs = function (string) {
+            string = string || '';
+            var args = string.match(/^(\/(?:\S|\s)*\/[gimy]{0,4})(?:,([^,]*))*$/i);
+            if (args && args.length) {
+                args.shift();
+            } else {
+                args = string.split(',');
+            }
+            return args;
+        };
+
+        var transformationArgs = extractArgs(transformationArgString);
 
         // Share context (`this`) between current instance and transformation factory
         return this.T[transformationName].apply(this, transformationArgs);

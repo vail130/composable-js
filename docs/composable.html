@@ -74,7 +74,7 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
             <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>.isArray ? <span class="hljs-built_in">Array</span>.isArray(arg) : <span class="hljs-built_in">Object</span>.prototype.toString.call(arg) === <span class="hljs-string">'[object Array]'</span>;
         },
         stringIsRegExp = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(string)</span> </span>{
-            <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^\/(\S|\s)*\/[gimy]{0,4}$/</span>.test(string);
+            <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^\/(?:\S|\s)*\/[gimy]{0,4}$/</span>.test(string);
         },
         toRegExp = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(pattern)</span> </span>{
             <span class="hljs-keyword">var</span> patternParts = pattern.split(<span class="hljs-string">'/'</span>);
@@ -456,12 +456,18 @@ function to apply to the item</p>
         <span class="hljs-keyword">var</span> transformationName = transformationArray.shift();
         <span class="hljs-keyword">var</span> transformationArgString = transformationArray.join(<span class="hljs-string">':'</span>);
 
-        <span class="hljs-keyword">var</span> transformationArgs;
-        <span class="hljs-keyword">if</span> (stringIsRegExp(transformationArgString)) {
-            transformationArgs = [transformationArgString];
-        } <span class="hljs-keyword">else</span> {
-            transformationArgs = transformationArgString.split(<span class="hljs-string">','</span>);
-        }</pre></div></div>
+        <span class="hljs-keyword">var</span> extractArgs = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(string)</span> </span>{
+            string = string || <span class="hljs-string">''</span>;
+            <span class="hljs-keyword">var</span> args = string.match(<span class="hljs-regexp">/^(\/(?:\S|\s)*\/[gimy]{0,4})(?:,([^,]*))*$/i</span>);
+            <span class="hljs-keyword">if</span> (args &amp;&amp; args.length) {
+                args.shift();
+            } <span class="hljs-keyword">else</span> {
+                args = string.split(<span class="hljs-string">','</span>);
+            }
+            <span class="hljs-keyword">return</span> args;
+        };
+
+        <span class="hljs-keyword">var</span> transformationArgs = extractArgs(transformationArgString);</pre></div></div>
             
         </li>
         
