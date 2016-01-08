@@ -19,21 +19,19 @@
     "url": "https://github.com/vail130/composable-js/issues"
   },
   "homepage": "https://github.com/vail130/composable-js",
-  "devDependencies": {
-    "docco": "*",
-    "eslint": "0.6.x",
-    "uglify-js": "2.4.x"
-  },
-  "scripts": {
-    "test": "npm run test-browser && npm run lint",
-    "lint": "eslint composable.js test/*.js",
-    "test-browser": "open test/index.html",
-    "build": "uglifyjs composable.js -c \"evaluate=false\" --comments \"/    .*/\" -m --source-map composable.min.map -o composable.min.js",
-    "doc": "docco composable.js"
-  },
   "files": [
     "composable.js",
     "composable.min.js",
     "composable.min.map"
-  ]
+  ],
+  "devDependencies": {
+    "docco": "0.7.0",
+    "eslint": "1.10.3",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.19",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-jasmine": "^0.3.6",
+    "karma-ng-scenario": "^0.1.0",
+    "uglify-js": "2.6.1"
+  }
 }

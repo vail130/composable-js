@@ -3,7 +3,7 @@ A JS library to select, transform and format data, declaratively.
 
 # Example
 ```html
-<div id="qunit-fixture">
+<div id="fixture">
     <input type="text" name="a" value="1">
 
     <div class="test-div" id="test-div1">Test Div 1</div>
@@ -45,7 +45,8 @@ data.divNumber === 1; // true
 data.testValue === 2; // true
 ```
 
-# Testing
+# Install and Test
 ```bash
-npm test
+make install
+make test
 ```

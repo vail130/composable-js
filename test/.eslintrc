@@ -3,6 +3,11 @@
     "browser": true
   },
   "globals": {
+    "describe": true,
+    "beforeAll": true,
+    "afterAll": true,
+    "it": true,
+    "expect": true,
     "test": false,
     "ok": false,
     "is": false,
@@ -14,7 +19,6 @@
     "throws": false,
     "asyncTest": false,
     "start": false,
-    "expect": false,
     "QUnit": false
   },
   "rules": {
@@ -22,6 +26,7 @@
     "dot-notation": 1,
     "no-new-wrappers": 0,
     "no-sparse-arrays": 0,
-    "no-extend-native": 0
+    "no-extend-native": 0,
+    "new-cap": 1
   }
 }
