@@ -7,7 +7,7 @@ module.exports = function (config) {
             '**/*.html': ['html2js']
         },
 
-        files: ['../composable.js', 'fixture.html', '**/*Spec.js'],
+        files: ['../composable.js', 'fixture.html', 'spec.js'],
 
         reporters: ['progress'],
 
