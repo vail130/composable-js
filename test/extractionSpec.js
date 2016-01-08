@@ -1,15 +1,7 @@
 describe('Composable', function () {
 
     beforeAll(function () {
-        var fixture = '<div id="fixture">' +
-            '<input type="text" name="a" value="1">' +
-            '<div class="test-div" id="test-div1">Test Div 1</div>' +
-            '<div class="test-div" id="test-div2">Test Div 2</div>' +
-            '<span class="test-span" id="test-span1">Test Span 1</span>' +
-            '<span class="test-span" id="test-span2">Test Span 2</span>' +
-            '<span class="test-span" id="test-span3">Test, Span/ 3</span>' +
-            '</div>';
-        document.body.insertAdjacentHTML('afterbegin', fixture);
+        document.body.insertAdjacentHTML('afterbegin', window.__html__['fixture.html']);
         window.testData = {test1: [1, 2, 3], test2: {a: 1,b: 2,c: 3}, test3: 11};
     });
 
@@ -47,14 +39,14 @@ describe('Composable', function () {
 
     it('should do regular expression replace with commas and slashes', function () {
         var extractedData = Composable({
-            c: [
+            a: [
                 'document',
                 'querySelector:#test-span3',
                 'innerText',
                 'replace:/Test, Span\/ 3/g,Test Span 3'
             ]
         });
-        expect(extractedData.c).toEqual('Test Span 3');
+        expect(extractedData.a).toEqual('Test Span 3');
     });
 
     it('should support using callable transformations', function () {
@@ -73,12 +65,56 @@ describe('Composable', function () {
 
     it('should take input data and get properties and indices', function () {
         var extractedData = Composable({
-            b: [
+            a: [
                 'window',
                 'getProperties:testData.test1.1'
             ]
         });
-        expect(extractedData.b).toEqual(2);
+        expect(extractedData.a).toEqual(2);
     });
+
+    describe('map', function () {
+        it('should work with sub commands which do and do not have arguments', function () {
+            var extractedData = Composable({
+                a: [
+                    'document',
+                    'querySelectorAll:.test-input-div',
+                    'map:querySelector:input',
+                    'map:value',
+                    'map:toInt'
+                ]
+            });
+            expect(extractedData.a).toEqual([1, 2, 3, 4]);
+        });
+    });
+
+    describe('getTransformation', function () {
+        it('should treat arguments of standard transformations, with the same name as a transformation, as arguments', function () {
+            var extractedData = Composable({
+                a: [
+                    'document',
+                    'querySelector:.test-match',
+                    'innerText',
+                    'match:match',
+                    'getIndex:0'
+                ]
+            });
+            expect(extractedData.a).toEqual('match');
+        });
+
+        it('should treat arguments of array transformations as transformations', function () {
+            var extractedData = Composable({
+                a: [
+                    'document',
+                    'querySelectorAll:.test-match',
+                    'map:innerText',
+                    'map:match:match',
+                    'map:getIndex:0'
+                ]
+            });
+            expect(extractedData.a).toEqual(['match', 'match']);
+        });
+    })
+
 
 });

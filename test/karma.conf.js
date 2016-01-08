@@ -3,7 +3,11 @@ module.exports = function (config) {
         basePath: '',
 
         frameworks: ['jasmine'],
-        files: ['../composable.js', '**/*Spec.js'],
+        preprocessors: {
+            '**/*.html': ['html2js']
+        },
+
+        files: ['../composable.js', 'fixture.html', '**/*Spec.js'],
 
         reporters: ['progress'],
 
