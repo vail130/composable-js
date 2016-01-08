@@ -24,6 +24,9 @@
     "composable.min.js",
     "composable.min.map"
   ],
+  "scripts": {
+    "test": "make test"
+  },
   "devDependencies": {
     "docco": "0.7.0",
     "eslint": "1.10.3",
