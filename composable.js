@@ -294,7 +294,7 @@
         return args;
     };
 
-    Composable.VERSION = '0.3.0';
+    Composable.VERSION = '0.4.0';
 
     // Make the object globally accessible
     root.Composable = Composable;
