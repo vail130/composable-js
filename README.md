@@ -1,3 +1,5 @@
+![Build Status](https://travis-ci.org/vail130/composable-js.svg?branch=master)
+
 # Composable
 A JS library to select, transform and format data, declaratively.
 
