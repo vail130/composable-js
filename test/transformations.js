@@ -75,4 +75,7 @@
         equal(Composable.T.getProperties('a.b.c')({a: {b: {c: 5}}}), 5, 'gets value for a nested property in an object');
     });
 
+    test('map', function () {
+        deepEqual(Composable.T.map(Composable.T.toFloat)(['1', '2', '3', '4']), [1.0, 2.0, 3.0, 4.0], 'maps toFloat to an array');
+    });
 }());

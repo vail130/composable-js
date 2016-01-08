@@ -44,6 +44,7 @@
             }
             return newObject;
         },
+        // FIXME: cachedQueryFactory should not use DOM nodes as keys to the cache.
         cachedQueryFactory = function (cacheKey) {
             return function (selector) {
                 var _this = this;
@@ -79,8 +80,16 @@
         },
 
         // DOM node transformations
-        querySelectorAll: cachedQueryFactory('querySelectorAll'),
-        querySelector: cachedQueryFactory('querySelector'),
+        querySelectorAll: function (selector) {
+            return function (node) {
+                return node ? node.querySelectorAll(selector) : null;
+            };
+        },
+        querySelector: function (selector) {
+            return function (node) {
+                return node ? node.querySelector(selector) : null;
+            };
+        },
         innerHTML: function (node) {
             return node ? node.innerHTML : null;
         },
@@ -186,6 +195,14 @@
         }
     };
 
+    var arrayTransformations = {
+        map: function (method) {
+            return function (array) {
+                return Array.prototype.map.call(array, method);
+            };
+        }
+    };
+
     // Allow usage as a function without `new` operator
     var Composable = function (config) {
         if (!(this instanceof Composable)) {
@@ -194,8 +211,22 @@
         return this.extract(config);
     };
 
+    var objectMerge = function () {
+        var extractedProperties = {};
+        for (var i = 0; i < arguments.length; i++) {
+            if (typeof arguments[i] === 'object') {
+                for (var key in arguments[i]) {
+                    if (arguments[i].hasOwnProperty(key)) {
+                        extractedProperties[key] = arguments[i][key];
+                    }
+                }
+            }
+        }
+        return extractedProperties;
+    };
+
     // Put transformations on Composable object for global referencing without `new` operator
-    Composable.prototype.T = Composable.T = transformations;
+    Composable.prototype.T = Composable.T = objectMerge(transformations, arrayTransformations);
 
     // Extract and format data from the DOM based on config
     Composable.prototype.extract = function (config) {
@@ -215,48 +246,52 @@
     };
 
     // Apply each transformation to the item, in series
-    Composable.prototype.applyTransformation = function (item, transformation) {
-        var transformationFunction = null;
-
-        if (isString(transformation)) {
-            if (this.T.hasOwnProperty(transformation)) {
-                transformationFunction = this.T[transformation];
-            } else if (this.T.hasOwnProperty(transformation.split(':', 1)[0])) {
-                transformationFunction = this.parseTransformation(transformation);
-            }
-        } else if (isFunction(transformation)) {
-            transformationFunction = transformation;
+    Composable.prototype.applyTransformation = function (item, transformationInput) {
+        var xform = this.getTransformation(transformationInput);
+        if (!xform) {
+            throw 'Transformation "' + transformationInput + '" invalid';
         }
-
-        if (!transformationFunction) {
-            throw 'Transformation ' + transformation + ' not implemented';
-        }
-
-        return transformationFunction(item);
+        return xform(item);
     };
 
-    // If a transformation has static arguments, use them to make a transformation
-    // function to apply to the item
-    Composable.prototype.parseTransformation = function (transformationString) {
-        var transformationArray = transformationString.split(':');
-        var transformationName = transformationArray.shift();
-        var transformationArgString = transformationArray.join(':');
+    Composable.prototype.getTransformation = function (transformationInput) {
+        if (isFunction(transformationInput)) {
+            return transformationInput;
+        } else if (!isString(transformationInput)) {
+            throw 'Invalid Input Type: ' + typeof transformationInput;
+        }
 
-        var extractArgs = function (string) {
-            string = string || '';
-            var args = string.match(/^(\/(?:\S|\s)*\/[gimy]{0,4})(?:,([^,]*))*$/i);
-            if (args && args.length) {
-                args.shift();
-            } else {
-                args = string.split(',');
-            }
-            return args;
-        };
+        if (!transformationInput) {
+            // either command string is empty or no sub command given in recursion
+            return null;
+        } else if (this.T.hasOwnProperty(transformationInput)) {
+            return this.T[transformationInput];
+        }
 
-        var transformationArgs = extractArgs(transformationArgString);
+        var transformationArray = transformationInput.split(':');
+        var command = transformationArray.shift();
+        var commandArgString = transformationArray.join(':');
 
-        // Share context (`this`) between current instance and transformation factory
-        return this.T[transformationName].apply(this, transformationArgs);
+        var subCommand;
+        if (arrayTransformations.hasOwnProperty(command)) {
+            subCommand = this.getTransformation(commandArgString);
+        } else if (!this.T.hasOwnProperty(command)) {
+            return null;
+        }
+
+        var args = subCommand ? [subCommand] : extractArgs(commandArgString);
+        return this.T[command].apply(this, args);
+    };
+
+    var extractArgs = function (string) {
+        string = string || '';
+        var args = string.match(/^(\/(?:\S|\s)*\/[gimy]{0,4})(?:,([^,]*))*$/i);
+        if (args && args.length) {
+            args.shift();
+        } else {
+            args = string.split(',');
+        }
+        return args;
     };
 
     Composable.VERSION = '0.3.0';
