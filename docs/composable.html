@@ -202,6 +202,17 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
         innerText: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">node</span>) </span>{
             <span class="hljs-keyword">return</span> node ? node.innerText || node.textContent : <span class="hljs-literal">null</span>;
         },
+        rootInnerText: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">node</span>) </span>{
+            <span class="hljs-keyword">if</span> (!node) <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+
+            <span class="hljs-keyword">var</span> textNodes = [];
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; node.childNodes.length; i++) {
+                <span class="hljs-keyword">if</span> (node.childNodes[i].nodeType === node.TEXT_NODE) {
+                    textNodes.push(Composable.T.trim(Composable.T.innerText(node.childNodes[i])));
+                }
+            }
+            <span class="hljs-keyword">return</span> Composable.T.trim(textNodes.join(<span class="hljs-string">' '</span>));
+        },
         value: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">node</span>) </span>{
             <span class="hljs-keyword">return</span> node ? node.value : <span class="hljs-literal">null</span>;
         },
@@ -256,6 +267,14 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
             <span class="hljs-keyword">var</span> div = root.document.createElement(<span class="hljs-string">'div'</span>);
             div.innerHTML = html;
             <span class="hljs-keyword">return</span> div.firstChild.nodeValue + <span class="hljs-built_in">String</span>();
+        },
+        reverse: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">item</span>) </span>{
+            <span class="hljs-keyword">if</span> (isString(item)) {
+                <span class="hljs-keyword">return</span> item.split(<span class="hljs-string">''</span>).reverse().join(<span class="hljs-string">''</span>);
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (isArray(item)) {
+                <span class="hljs-keyword">return</span> item.reverse();
+            }
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
         },
         toString: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">item</span>) </span>{
             <span class="hljs-keyword">return</span> item ? item + <span class="hljs-built_in">String</span>() : <span class="hljs-literal">null</span>;
