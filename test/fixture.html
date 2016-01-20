@@ -33,6 +33,24 @@
 
     <div class="test-match">match</div>
     <div class="test-match">matches</div>
+
+    <div class="test-inner-text">
+        Root Text
+        <div>Sub Text</div>
+    </div>
+
+    <div class="test-root-inner-text">
+        Root Text
+        <div class="test-inner-text-child">
+            Sub Text
+        </div>
+        More Text
+        <div id="test-remove-matching-sub-text">
+            More
+        </div>
+        More Text
+        <span>Spans Should Stay</span>
+    </div>
 </div>
 
 <script>

@@ -96,6 +96,17 @@
         innerText: function (node) {
             return node ? node.innerText || node.textContent : null;
         },
+        rootInnerText: function (node) {
+            if (!node) return null;
+
+            var textNodes = [];
+            for (var i = 0; i < node.childNodes.length; i++) {
+                if (node.childNodes[i].nodeType === node.TEXT_NODE) {
+                    textNodes.push(Composable.T.trim(Composable.T.innerText(node.childNodes[i])));
+                }
+            }
+            return Composable.T.trim(textNodes.join(' '));
+        },
         value: function (node) {
             return node ? node.value : null;
         },
@@ -126,6 +137,14 @@
             var div = root.document.createElement('div');
             div.innerHTML = html;
             return div.firstChild.nodeValue + String();
+        },
+        reverse: function (item) {
+            if (isString(item)) {
+                return item.split('').reverse().join('');
+            } else if (isArray(item)) {
+                return item.reverse();
+            }
+            return null;
         },
         toString: function (item) {
             return item ? item + String() : null;

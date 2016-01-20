@@ -160,6 +160,18 @@ describe('Composable', function () {
         it('should run htmlToText', function () {
             expect(Composable.T.htmlToText('&amp;')).toEqual('&');
         });
+
+        it('should run innerText', function () {
+            expect(Composable.T.innerText(document.querySelector('.test-inner-text'))).toEqual('Root Text\nSub Text\n');
+        });
+
+        it('should run rootInnerText', function () {
+            expect(Composable.T.rootInnerText(
+                document.querySelector('.test-root-inner-text'))
+            ).toEqual('Root Text More Text More Text');
+
+            expect(Composable.T.rootInnerText(null)).toBe(null);
+        });
 	
         it('should run toString', function () {
             expect(Composable.T.toString(12.34)).toEqual('12.34');
