@@ -230,7 +230,7 @@
         return this.extract(config);
     };
 
-    var objectMerge = function () {
+    Composable.__objectMerge = function () {
         var extractedProperties = {};
         for (var i = 0; i < arguments.length; i++) {
             if (typeof arguments[i] === 'object') {
@@ -245,7 +245,7 @@
     };
 
     // Put transformations on Composable object for global referencing without `new` operator
-    Composable.prototype.T = Composable.T = objectMerge(transformations, arrayTransformations);
+    Composable.prototype.T = Composable.T = Composable.__objectMerge(transformations, arrayTransformations);
 
     // Extract and format data from the DOM based on config
     Composable.prototype.extract = function (config) {
@@ -298,18 +298,27 @@
             return null;
         }
 
-        var args = subCommand ? [subCommand] : extractArgs(commandArgString);
+        var args = subCommand ? [subCommand] : Composable.extractArgs(commandArgString);
         return this.T[command].apply(this, args);
     };
 
-    var extractArgs = function (string) {
+    Composable.extractArgs = function (string) {
         string = string || '';
-        var args = string.match(/^(\/(?:\S|\s)*\/[gimy]{0,4})(?:,([^,]*))*$/i);
-        if (args && args.length) {
-            args.shift();
-        } else {
-            args = string.split(',');
+        var argRegexMatch = string.match(/^(\/.*?(?:(?:\\\\)+|[^\\])\/[gimy]{0,4})(?:,|$)/i);
+
+        var args = [];
+        if (argRegexMatch && argRegexMatch.length) {
+            var regexWithFlagsWithoutComma = string.slice(0, argRegexMatch[1].length);
+            args.push(regexWithFlagsWithoutComma);
+
+            var lengthOfRegexWithComma = argRegexMatch[0].length;
+            string = string.slice(lengthOfRegexWithComma);
         }
+
+        if (string.length) {
+            args = args.concat(string.split(','));
+        }
+
         return args;
     };
 

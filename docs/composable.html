@@ -409,7 +409,7 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
         <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.extract(config);
     };
 
-    <span class="hljs-keyword">var</span> objectMerge = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    Composable.__objectMerge = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
         <span class="hljs-keyword">var</span> extractedProperties = {};
         <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-built_in">arguments</span>.length; i++) {
             <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">arguments</span>[i] === <span class="hljs-string">'object'</span>) {
@@ -436,7 +436,7 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Composable.prototype.T = Composable.T = objectMerge(transformations, arrayTransformations);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    Composable.prototype.T = Composable.T = Composable.__objectMerge(transformations, arrayTransformations);</pre></div></div>
             
         </li>
         
@@ -526,18 +526,27 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
             <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
         }
 
-        <span class="hljs-keyword">var</span> args = subCommand ? [subCommand] : extractArgs(commandArgString);
+        <span class="hljs-keyword">var</span> args = subCommand ? [subCommand] : Composable.extractArgs(commandArgString);
         <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.T[command].apply(<span class="hljs-keyword">this</span>, args);
     };
 
-    <span class="hljs-keyword">var</span> extractArgs = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">string</span>) </span>{
+    Composable.extractArgs = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">string</span>) </span>{
         string = string || <span class="hljs-string">''</span>;
-        <span class="hljs-keyword">var</span> args = string.match(<span class="hljs-regexp">/^(\/(?:\S|\s)*\/[gimy]{0,4})(?:,([^,]*))*$/i</span>);
-        <span class="hljs-keyword">if</span> (args &amp;&amp; args.length) {
-            args.shift();
-        } <span class="hljs-keyword">else</span> {
-            args = string.split(<span class="hljs-string">','</span>);
+        <span class="hljs-keyword">var</span> argRegexMatch = string.match(<span class="hljs-regexp">/^(\/.*?(?:(?:\\\\)+|[^\\])\/[gimy]{0,4})(?:,|$)/i</span>);
+
+        <span class="hljs-keyword">var</span> args = [];
+        <span class="hljs-keyword">if</span> (argRegexMatch &amp;&amp; argRegexMatch.length) {
+            <span class="hljs-keyword">var</span> regexWithFlagsWithoutComma = string.slice(<span class="hljs-number">0</span>, argRegexMatch[<span class="hljs-number">1</span>].length);
+            args.push(regexWithFlagsWithoutComma);
+
+            <span class="hljs-keyword">var</span> lengthOfRegexWithComma = argRegexMatch[<span class="hljs-number">0</span>].length;
+            string = string.slice(lengthOfRegexWithComma);
         }
+
+        <span class="hljs-keyword">if</span> (string.length) {
+            args = args.concat(string.split(<span class="hljs-string">','</span>));
+        }
+
         <span class="hljs-keyword">return</span> args;
     };
 

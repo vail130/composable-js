@@ -2,7 +2,7 @@ describe('Composable', function () {
 
     beforeAll(function () {
         document.body.insertAdjacentHTML('afterbegin', window.__html__['fixture.html']);
-        window.testData = {test1: [1, 2, 3], test2: {a: 1,b: 2,c: 3}, test3: 11};
+        window.testData = {test1: [1, 2, 3], test2: {a: 1, b: 2, c: 3}, test3: 11};
     });
 
     afterAll(function () {
@@ -23,32 +23,7 @@ describe('Composable', function () {
         });
         expect(extractedData.a).toEqual(1);
     });
-	
-    it('should parse regular expressions with commas and slashes', function () {
-        var extractedData = Composable({
-            b: [
-                'document',
-                'querySelector:#test-span3',
-                'innerText',
-                'match:/Test, Span\/ 3/g',
-                'getIndex:0'
-            ]
-        });
-        expect(extractedData.b).toEqual('Test, Span/ 3');
-    });
-	
-    it('should do regular expression replace with commas and slashes', function () {
-        var extractedData = Composable({
-            a: [
-                'document',
-                'querySelector:#test-span3',
-                'innerText',
-                'replace:/Test, Span\/ 3/g,Test Span 3'
-            ]
-        });
-        expect(extractedData.a).toEqual('Test Span 3');
-    });
-	
+
     it('should support using callable transformations', function () {
         var extractedData = Composable({
             a: [
@@ -62,7 +37,7 @@ describe('Composable', function () {
         });
         expect(extractedData.a).toEqual(1);
     });
-	
+
     it('should take input data and get properties and indices', function () {
         var extractedData = Composable({
             a: [
@@ -72,7 +47,7 @@ describe('Composable', function () {
         });
         expect(extractedData.a).toEqual(2);
     });
-	
+
     describe('getTransformation', function () {
         it('should work with sub commands which do and do not have arguments', function () {
             var extractedData = Composable({
@@ -86,7 +61,7 @@ describe('Composable', function () {
             });
             expect(extractedData.a).toEqual([1, 2, 3, 4]);
         });
-	
+
         it('should treat arguments of standard transformations, with the same name as a transformation, as arguments', function () {
             var extractedData = Composable({
                 a: [
@@ -99,7 +74,7 @@ describe('Composable', function () {
             });
             expect(extractedData.a).toEqual('match');
         });
-	
+
         it('should treat arguments of array transformations as transformations', function () {
             var extractedData = Composable({
                 a: [
@@ -113,7 +88,7 @@ describe('Composable', function () {
             expect(extractedData.a).toEqual(['match', 'match']);
         });
     });
-	
+
     describe('array transformations', function () {
         it('should run map', function () {
             var extractedData = Composable({
@@ -128,35 +103,65 @@ describe('Composable', function () {
             expect(extractedData.a).toEqual([1, 2, 3, 4]);
         });
     });
-	
+
+    describe('extractArgs', function () {
+        it('should parse arguments', function () {
+            expect(Composable.extractArgs('asdf,qwer,2')).toEqual(['asdf', 'qwer', '2']);
+        });
+
+        it('should parse regular expression as first argument', function () {
+            expect(Composable.extractArgs('/asdf/g,qwer,2')).toEqual(['/asdf/g', 'qwer', '2']);
+        });
+
+        it('should parse regular expression as first argument where second arg ends in slash', function () {
+            expect(Composable.extractArgs('/^https?:\\/\\/(www\.)?/i,http://'))
+                .toEqual(['/^https?:\\/\\/(www\.)?/i', 'http://']);
+        });
+
+        it('should parse regular expressions with commas and escaped slashes', function () {
+            expect(Composable.extractArgs('/Test, Span\\/ 3/g,Test Span 3'))
+                .toEqual(['/Test, Span\\/ 3/g', 'Test Span 3']);
+        });
+
+        it('should parse regular expressions with two backslashes before slash', function () {
+            expect(Composable.extractArgs('/a\\\\/,b/'))
+                .toEqual(['/a\\\\/', 'b/']);
+        });
+
+        it('should parse regular expressions with only backslashes', function () {
+            expect(Composable.extractArgs('/\\\\/,\\\\,test'))
+                .toEqual(['/\\\\/', '\\\\', 'test']);
+        });
+    });
+
     describe('transformations', function () {
         it('should get window', function () {
             expect(Composable.T.window()).toEqual(window);
         });
-	
+
         it('should get document', function () {
             expect(Composable.T.document()).toEqual(document);
         });
-	
+
         it('should run toFloat', function () {
             expect(Composable.T.toFloat('12.34')).toEqual(12.34);
         });
-	
+
         it('should run toInt', function () {
             expect(Composable.T.toInt('12.34')).toEqual(12);
             expect(Composable.T.toInt('12')).toEqual(12);
         });
-	
+
         it('should run round', function () {
             expect(Composable.T.round(12.34)).toEqual(12);
             expect(Composable.T.round(12.54)).toEqual(13);
         });
-	
+
         it('should run multiplyBy', function () {
             expect(Composable.T.multiplyBy(100)(12.34)).toEqual(1234);
             expect(Composable.T.multiplyBy(20)('12.54')).toEqual(null);
         });
-	
+
         it('should run htmlToText', function () {
             expect(Composable.T.htmlToText('&amp;')).toEqual('&');
         });
@@ -172,20 +177,20 @@ describe('Composable', function () {
 
             expect(Composable.T.rootInnerText(null)).toBe(null);
         });
-	
+
         it('should run toString', function () {
             expect(Composable.T.toString(12.34)).toEqual('12.34');
         });
-	
+
         it('should run trim', function () {
             expect(Composable.T.trim('  asdf  \n')).toEqual('asdf');
         });
-	
+
         it('should run split', function () {
             expect(Composable.T.split('\n')('asdf\nasdf')).toEqual(['asdf', 'asdf']);
             expect(Composable.T.split('\n', 1)('asdf\nasdf')).toEqual(['asdf']);
         });
-	
+
         it('should run replace', function () {
             expect(Composable.T.replace(/\s+/, ' ')('asdf\n\tasdf')).toEqual('asdf asdf');
             expect(Composable.T.replace('\n', ' ')('asdf\nasdf')).toEqual('asdf asdf');
