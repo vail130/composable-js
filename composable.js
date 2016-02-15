@@ -44,7 +44,7 @@
             }
             return newObject;
         },
-        // FIXME: cachedQueryFactory should not use DOM nodes as keys to the cache.
+    // FIXME: cachedQueryFactory should not use DOM nodes as keys to the cache.
         cachedQueryFactory = function (cacheKey) {
             return function (selector) {
                 var _this = this;
@@ -186,9 +186,15 @@
             if (typeof stop !== 'undefined') {
                 args.push(parseInt(stop, 10));
             }
-            return function (array) {
-                // Slice needs to work on NodeList instances
-                return array ? Array.prototype.slice.apply(array, args) : null;
+            return function (input) {
+                var output;
+                if (isString(input)) {
+                    output = input ? String.prototype.slice.apply(input, args) : null;
+                } else {
+                    // Slice needs to work on NodeList instances
+                    output = input ? Array.prototype.slice.apply(input, args) : null;
+                }
+                return output;
             };
         },
 

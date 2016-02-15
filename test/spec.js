@@ -212,6 +212,10 @@ describe('Composable', function () {
             expect(Composable.T.slice(-1)(document.querySelectorAll('.test-span'))[0].id).toEqual('test-span3');
         });
 
+        it('should run slice for strings', function () {
+            expect(Composable.T.slice(-2, -1)('abc')).toEqual('b');
+        });
+
         it('should run getProperty', function () {
             expect(Composable.T.getProperty('a')({a: 1, b: 2})).toEqual(1);
         });

@@ -328,7 +328,11 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
             <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> stop !== <span class="hljs-string">'undefined'</span>) {
                 args.push(<span class="hljs-built_in">parseInt</span>(stop, <span class="hljs-number">10</span>));
             }
-            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">array</span>) </span>{</pre></div></div>
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">input</span>) </span>{
+                <span class="hljs-keyword">var</span> output;
+                <span class="hljs-keyword">if</span> (isString(input)) {
+                    output = input ? <span class="hljs-built_in">String</span>.prototype.slice.apply(input, args) : <span class="hljs-literal">null</span>;
+                } <span class="hljs-keyword">else</span> {</pre></div></div>
             
         </li>
         
@@ -343,7 +347,9 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">return</span> array ? <span class="hljs-built_in">Array</span>.prototype.slice.apply(array, args) : <span class="hljs-literal">null</span>;
+            <div class="content"><div class='highlight'><pre>                    output = input ? <span class="hljs-built_in">Array</span>.prototype.slice.apply(input, args) : <span class="hljs-literal">null</span>;
+                }
+                <span class="hljs-keyword">return</span> output;
             };
         },</pre></div></div>
             
