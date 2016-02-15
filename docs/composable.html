@@ -288,19 +288,24 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
                 args.push(<span class="hljs-built_in">parseInt</span>(limit, <span class="hljs-number">10</span>));
             }
             <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">text</span>) </span>{
-                <span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.split.apply(text, args);
+                <span class="hljs-keyword">return</span> isString(text) ? text.split.apply(text, args) : <span class="hljs-literal">null</span>;
+            };
+        },
+        join: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">delimeter</span>) </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">array</span>) </span>{
+                <span class="hljs-keyword">return</span> isArray(array) ? array.join(delimeter) : <span class="hljs-literal">null</span>;
             };
         },
         replace: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">pattern, replacement</span>) </span>{
             pattern = isString(pattern) &amp;&amp; stringIsRegExp(pattern) ? toRegExp(pattern) : pattern;
             <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">text</span>) </span>{
-                <span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.replace(pattern, replacement);
+                <span class="hljs-keyword">return</span> isString(text) ? text.replace(pattern, replacement) : <span class="hljs-literal">null</span>;
             };
         },
         match: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">pattern</span>) </span>{
             pattern = isString(pattern) &amp;&amp; stringIsRegExp(pattern) ? toRegExp(pattern) : pattern;
             <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">text</span>) </span>{
-                <span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.match(pattern);
+                <span class="hljs-keyword">return</span> isString(text) ? text.match(pattern) : <span class="hljs-literal">null</span>;
             };
         },</pre></div></div>
             

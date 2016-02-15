@@ -158,19 +158,24 @@
                 args.push(parseInt(limit, 10));
             }
             return function (text) {
-                return isString(text) && text.split.apply(text, args);
+                return isString(text) ? text.split.apply(text, args) : null;
+            };
+        },
+        join: function (delimeter) {
+            return function (array) {
+                return isArray(array) ? array.join(delimeter) : null;
             };
         },
         replace: function (pattern, replacement) {
             pattern = isString(pattern) && stringIsRegExp(pattern) ? toRegExp(pattern) : pattern;
             return function (text) {
-                return isString(text) && text.replace(pattern, replacement);
+                return isString(text) ? text.replace(pattern, replacement) : null;
             };
         },
         match: function (pattern) {
             pattern = isString(pattern) && stringIsRegExp(pattern) ? toRegExp(pattern) : pattern;
             return function (text) {
-                return isString(text) && text.match(pattern);
+                return isString(text) ? text.match(pattern) : null;
             };
         },
 

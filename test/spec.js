@@ -191,6 +191,10 @@ describe('Composable', function () {
             expect(Composable.T.split('\n', 1)('asdf\nasdf')).toEqual(['asdf']);
         });
 
+        it('should run join', function () {
+            expect(Composable.T.join('\n')(['asdf', 'asdf'])).toEqual('asdf\nasdf');
+        });
+
         it('should run replace', function () {
             expect(Composable.T.replace(/\s+/, ' ')('asdf\n\tasdf')).toEqual('asdf asdf');
             expect(Composable.T.replace('\n', ' ')('asdf\nasdf')).toEqual('asdf asdf');
