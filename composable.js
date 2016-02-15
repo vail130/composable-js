@@ -44,7 +44,7 @@
             }
             return newObject;
         },
-        // FIXME: cachedQueryFactory should not use DOM nodes as keys to the cache.
+    // FIXME: cachedQueryFactory should not use DOM nodes as keys to the cache.
         cachedQueryFactory = function (cacheKey) {
             return function (selector) {
                 var _this = this;
@@ -158,19 +158,24 @@
                 args.push(parseInt(limit, 10));
             }
             return function (text) {
-                return isString(text) && text.split.apply(text, args);
+                return isString(text) ? text.split.apply(text, args) : null;
+            };
+        },
+        join: function (delimeter) {
+            return function (array) {
+                return isArray(array) ? array.join(delimeter) : null;
             };
         },
         replace: function (pattern, replacement) {
             pattern = isString(pattern) && stringIsRegExp(pattern) ? toRegExp(pattern) : pattern;
             return function (text) {
-                return isString(text) && text.replace(pattern, replacement);
+                return isString(text) ? text.replace(pattern, replacement) : null;
             };
         },
         match: function (pattern) {
             pattern = isString(pattern) && stringIsRegExp(pattern) ? toRegExp(pattern) : pattern;
             return function (text) {
-                return isString(text) && text.match(pattern);
+                return isString(text) ? text.match(pattern) : null;
             };
         },
 
@@ -186,9 +191,15 @@
             if (typeof stop !== 'undefined') {
                 args.push(parseInt(stop, 10));
             }
-            return function (array) {
-                // Slice needs to work on NodeList instances
-                return array ? Array.prototype.slice.apply(array, args) : null;
+            return function (input) {
+                var output;
+                if (isString(input)) {
+                    output = input ? String.prototype.slice.apply(input, args) : null;
+                } else {
+                    // Slice needs to work on NodeList instances
+                    output = input ? Array.prototype.slice.apply(input, args) : null;
+                }
+                return output;
             };
         },
 
@@ -322,7 +333,7 @@
         return args;
     };
 
-    Composable.VERSION = '0.4.0';
+    Composable.VERSION = '0.4.1';
 
     // Make the object globally accessible
     root.Composable = Composable;

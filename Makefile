@@ -19,4 +19,7 @@ build:
 	$(DOCCO) composable.js
 	$(UGLIFY) composable.js -m --source-map composable.min.map -o composable.min.js
 
+update-version:
+	./scripts/update-version.sh $$old_version $$new_version
+
 .PHONY: test

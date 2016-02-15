@@ -191,6 +191,10 @@ describe('Composable', function () {
             expect(Composable.T.split('\n', 1)('asdf\nasdf')).toEqual(['asdf']);
         });
 
+        it('should run join', function () {
+            expect(Composable.T.join('\n')(['asdf', 'asdf'])).toEqual('asdf\nasdf');
+        });
+
         it('should run replace', function () {
             expect(Composable.T.replace(/\s+/, ' ')('asdf\n\tasdf')).toEqual('asdf asdf');
             expect(Composable.T.replace('\n', ' ')('asdf\nasdf')).toEqual('asdf asdf');
@@ -210,6 +214,10 @@ describe('Composable', function () {
         it('should run slice', function () {
             expect(Composable.T.slice(-1)(['a', 'b', 'c'])).toEqual(['c']);
             expect(Composable.T.slice(-1)(document.querySelectorAll('.test-span'))[0].id).toEqual('test-span3');
+        });
+
+        it('should run slice for strings', function () {
+            expect(Composable.T.slice(-2, -1)('abc')).toEqual('b');
         });
 
         it('should run getProperty', function () {

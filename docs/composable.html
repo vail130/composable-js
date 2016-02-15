@@ -288,19 +288,24 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
                 args.push(<span class="hljs-built_in">parseInt</span>(limit, <span class="hljs-number">10</span>));
             }
             <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">text</span>) </span>{
-                <span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.split.apply(text, args);
+                <span class="hljs-keyword">return</span> isString(text) ? text.split.apply(text, args) : <span class="hljs-literal">null</span>;
+            };
+        },
+        join: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">delimeter</span>) </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">array</span>) </span>{
+                <span class="hljs-keyword">return</span> isArray(array) ? array.join(delimeter) : <span class="hljs-literal">null</span>;
             };
         },
         replace: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">pattern, replacement</span>) </span>{
             pattern = isString(pattern) &amp;&amp; stringIsRegExp(pattern) ? toRegExp(pattern) : pattern;
             <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">text</span>) </span>{
-                <span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.replace(pattern, replacement);
+                <span class="hljs-keyword">return</span> isString(text) ? text.replace(pattern, replacement) : <span class="hljs-literal">null</span>;
             };
         },
         match: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">pattern</span>) </span>{
             pattern = isString(pattern) &amp;&amp; stringIsRegExp(pattern) ? toRegExp(pattern) : pattern;
             <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">text</span>) </span>{
-                <span class="hljs-keyword">return</span> isString(text) &amp;&amp; text.match(pattern);
+                <span class="hljs-keyword">return</span> isString(text) ? text.match(pattern) : <span class="hljs-literal">null</span>;
             };
         },</pre></div></div>
             
@@ -328,7 +333,11 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
             <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> stop !== <span class="hljs-string">'undefined'</span>) {
                 args.push(<span class="hljs-built_in">parseInt</span>(stop, <span class="hljs-number">10</span>));
             }
-            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">array</span>) </span>{</pre></div></div>
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">input</span>) </span>{
+                <span class="hljs-keyword">var</span> output;
+                <span class="hljs-keyword">if</span> (isString(input)) {
+                    output = input ? <span class="hljs-built_in">String</span>.prototype.slice.apply(input, args) : <span class="hljs-literal">null</span>;
+                } <span class="hljs-keyword">else</span> {</pre></div></div>
             
         </li>
         
@@ -343,7 +352,9 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">return</span> array ? <span class="hljs-built_in">Array</span>.prototype.slice.apply(array, args) : <span class="hljs-literal">null</span>;
+            <div class="content"><div class='highlight'><pre>                    output = input ? <span class="hljs-built_in">Array</span>.prototype.slice.apply(input, args) : <span class="hljs-literal">null</span>;
+                }
+                <span class="hljs-keyword">return</span> output;
             };
         },</pre></div></div>
             
@@ -550,7 +561,7 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
         <span class="hljs-keyword">return</span> args;
     };
 
-    Composable.VERSION = <span class="hljs-string">'0.4.0'</span>;</pre></div></div>
+    Composable.VERSION = <span class="hljs-string">'0.4.1'</span>;</pre></div></div>
             
         </li>
         
