@@ -502,11 +502,11 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
     Composable.prototype.getTransformation = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">transformationInput</span>) </span>{
         <span class="hljs-keyword">if</span> (isFunction(transformationInput)) {
             <span class="hljs-keyword">return</span> transformationInput;
-        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!isString(transformationInput)) {
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!isArray(transformationInput) &amp;&amp; !isString(transformationInput)) {
             <span class="hljs-keyword">throw</span> <span class="hljs-string">'Invalid Input Type: '</span> + <span class="hljs-keyword">typeof</span> transformationInput;
         }
 
-        <span class="hljs-keyword">if</span> (!transformationInput) {</pre></div></div>
+        <span class="hljs-keyword">if</span> (!transformationInput || !transformationInput.length) {</pre></div></div>
             
         </li>
         
@@ -522,23 +522,61 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
             </div>
             
             <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
-        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.T.hasOwnProperty(transformationInput)) {
-            <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.T[transformationInput];
         }
 
-        <span class="hljs-keyword">var</span> transformationArray = transformationInput.split(<span class="hljs-string">':'</span>);
-        <span class="hljs-keyword">var</span> command = transformationArray.shift();
-        <span class="hljs-keyword">var</span> commandArgString = transformationArray.join(<span class="hljs-string">':'</span>);
+        <span class="hljs-keyword">var</span> transformation;
+        <span class="hljs-keyword">if</span> (isArray(transformationInput)) {
+            <span class="hljs-keyword">if</span> (transformationInput.length === <span class="hljs-number">1</span> &amp;&amp; <span class="hljs-keyword">this</span>.T.hasOwnProperty(transformationInput[<span class="hljs-number">0</span>])) {
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.T[transformationInput[<span class="hljs-number">0</span>]];
+            }
+            transformation = <span class="hljs-keyword">this</span>.getTransformationForArrayTransformation(transformationInput);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.T.hasOwnProperty(transformationInput)) {
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.T[transformationInput];
+            }
+            transformation = <span class="hljs-keyword">this</span>.getTransformationForStringTransformation(transformationInput);
+        }
 
-        <span class="hljs-keyword">var</span> subCommand;
-        <span class="hljs-keyword">if</span> (arrayTransformations.hasOwnProperty(command)) {
-            subCommand = <span class="hljs-keyword">this</span>.getTransformation(commandArgString);
-        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.T.hasOwnProperty(command)) {
+        <span class="hljs-keyword">if</span> (!transformation) {
             <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
         }
 
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.T[transformation.command].apply(<span class="hljs-keyword">this</span>, transformation.args);
+    };
+
+    Composable.prototype.getTransformationForArrayTransformation = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">transformationInput</span>) </span>{
+        <span class="hljs-keyword">var</span> command = transformationInput[<span class="hljs-number">0</span>];
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.T.hasOwnProperty(command)) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        }
+
+        <span class="hljs-keyword">var</span> args = transformationInput.slice(<span class="hljs-number">1</span>);
+        <span class="hljs-keyword">if</span> (arrayTransformations.hasOwnProperty(command)) {
+            <span class="hljs-keyword">var</span> subCommand = <span class="hljs-keyword">this</span>.getTransformation(args);
+            <span class="hljs-keyword">if</span> (subCommand) {
+                args = [subCommand];
+            }
+        }
+
+        <span class="hljs-keyword">return</span> {command: command, args: args};
+    };
+
+    Composable.prototype.getTransformationForStringTransformation = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">transformationInput</span>) </span>{
+        <span class="hljs-keyword">var</span> transformationArray = transformationInput.split(<span class="hljs-string">':'</span>);
+        <span class="hljs-keyword">var</span> command = transformationArray.shift();
+        <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.T.hasOwnProperty(command)) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        }
+
+        <span class="hljs-keyword">var</span> commandArgString = transformationArray.join(<span class="hljs-string">':'</span>);
+        <span class="hljs-keyword">var</span> subCommand;
+        <span class="hljs-keyword">if</span> (arrayTransformations.hasOwnProperty(command)) {
+            subCommand = <span class="hljs-keyword">this</span>.getTransformation(commandArgString);
+        }
+
         <span class="hljs-keyword">var</span> args = subCommand ? [subCommand] : Composable.extractArgs(commandArgString);
-        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.T[command].apply(<span class="hljs-keyword">this</span>, args);
+
+        <span class="hljs-keyword">return</span> {command: command, args: args};
     };
 
     Composable.extractArgs = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">string</span>) </span>{
@@ -561,7 +599,7 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
         <span class="hljs-keyword">return</span> args;
     };
 
-    Composable.VERSION = <span class="hljs-string">'0.4.1'</span>;</pre></div></div>
+    Composable.VERSION = <span class="hljs-string">'0.4.2'</span>;</pre></div></div>
             
         </li>
         

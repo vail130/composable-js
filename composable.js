@@ -287,30 +287,68 @@
     Composable.prototype.getTransformation = function (transformationInput) {
         if (isFunction(transformationInput)) {
             return transformationInput;
-        } else if (!isString(transformationInput)) {
+        } else if (!isArray(transformationInput) && !isString(transformationInput)) {
             throw 'Invalid Input Type: ' + typeof transformationInput;
         }
 
-        if (!transformationInput) {
+        if (!transformationInput || !transformationInput.length) {
             // either command string is empty or no sub command given in recursion
             return null;
-        } else if (this.T.hasOwnProperty(transformationInput)) {
-            return this.T[transformationInput];
         }
 
+        var transformation;
+        if (isArray(transformationInput)) {
+            if (transformationInput.length === 1 && this.T.hasOwnProperty(transformationInput[0])) {
+                return this.T[transformationInput[0]];
+            }
+            transformation = this.getTransformationForArrayTransformation(transformationInput);
+        } else {
+            if (this.T.hasOwnProperty(transformationInput)) {
+                return this.T[transformationInput];
+            }
+            transformation = this.getTransformationForStringTransformation(transformationInput);
+        }
+
+        if (!transformation) {
+            return null;
+        }
+
+        return this.T[transformation.command].apply(this, transformation.args);
+    };
+
+    Composable.prototype.getTransformationForArrayTransformation = function (transformationInput) {
+        var command = transformationInput[0];
+        if (!this.T.hasOwnProperty(command)) {
+            return null;
+        }
+
+        var args = transformationInput.slice(1);
+        if (arrayTransformations.hasOwnProperty(command)) {
+            var subCommand = this.getTransformation(args);
+            if (subCommand) {
+                args = [subCommand];
+            }
+        }
+
+        return {command: command, args: args};
+    };
+
+    Composable.prototype.getTransformationForStringTransformation = function (transformationInput) {
         var transformationArray = transformationInput.split(':');
         var command = transformationArray.shift();
-        var commandArgString = transformationArray.join(':');
+        if (!this.T.hasOwnProperty(command)) {
+            return null;
+        }
 
+        var commandArgString = transformationArray.join(':');
         var subCommand;
         if (arrayTransformations.hasOwnProperty(command)) {
             subCommand = this.getTransformation(commandArgString);
-        } else if (!this.T.hasOwnProperty(command)) {
-            return null;
         }
 
         var args = subCommand ? [subCommand] : Composable.extractArgs(commandArgString);
-        return this.T[command].apply(this, args);
+
+        return {command: command, args: args};
     };
 
     Composable.extractArgs = function (string) {
@@ -333,7 +371,7 @@
         return args;
     };
 
-    Composable.VERSION = '0.4.1';
+    Composable.VERSION = '0.4.2';
 
     // Make the object globally accessible
     root.Composable = Composable;

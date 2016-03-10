@@ -3,6 +3,7 @@ describe('Composable', function () {
     beforeAll(function () {
         document.body.insertAdjacentHTML('afterbegin', window.__html__['fixture.html']);
         window.testData = {test1: [1, 2, 3], test2: {a: 1, b: 2, c: 3}, test3: 11};
+        window.testData2 = {stringWithComma: 'Hello, and welcome!'};
     });
 
     afterAll(function () {
@@ -101,6 +102,32 @@ describe('Composable', function () {
                 ]
             });
             expect(extractedData.a).toEqual([1, 2, 3, 4]);
+        });
+    });
+
+    describe('getTransformation', function () {
+        it('should allow an array instead of a string in transformation pipeline', function () {
+            var extractedData = Composable({
+                a: [
+                    ['window'],
+                    ['getProperties', 'testData2.stringWithComma'],
+                    ['split', ','],
+                    ['map', 'trim']
+                ]
+            });
+            expect(extractedData.a).toEqual(['Hello', 'and welcome!']);
+        });
+
+        it('should allow arrays and strings in transformation pipeline', function () {
+            var extractedData = Composable({
+                a: [
+                    'window',
+                    'getProperties:testData2.stringWithComma',
+                    ['split', ','],
+                    'map:trim'
+                ]
+            });
+            expect(extractedData.a).toEqual(['Hello', 'and welcome!']);
         });
     });
 
