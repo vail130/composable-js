@@ -17,6 +17,9 @@
         isArray = function (arg) {
             return Array.isArray ? Array.isArray(arg) : Object.prototype.toString.call(arg) === '[object Array]';
         },
+        isNodeList = function (arg) {
+            return Object.prototype.toString.call(arg) === '[object NodeList]';
+        },
         stringIsRegExp = function (string) {
             return /^\/(?:\S|\s)*\/[gimy]{0,4}$/.test(string);
         },
@@ -195,7 +198,7 @@
                 var output;
                 if (isString(input)) {
                     output = input ? String.prototype.slice.apply(input, args) : null;
-                } else {
+                } else if (isArray(input) || isNodeList(input)){
                     // Slice needs to work on NodeList instances
                     output = input ? Array.prototype.slice.apply(input, args) : null;
                 }
@@ -228,7 +231,7 @@
     var arrayTransformations = {
         map: function (method) {
             return function (array) {
-                return Array.prototype.map.call(array, method);
+                return isArray(array) || isNodeList(array) ? Array.prototype.map.call(array, method) : null;
             };
         }
     };
@@ -371,7 +374,7 @@
         return args;
     };
 
-    Composable.VERSION = '0.4.2';
+    Composable.VERSION = '0.4.3';
 
     // Make the object globally accessible
     root.Composable = Composable;
