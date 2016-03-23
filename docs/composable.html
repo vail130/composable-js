@@ -73,6 +73,9 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
         isArray = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">arg</span>) </span>{
             <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>.isArray ? <span class="hljs-built_in">Array</span>.isArray(arg) : <span class="hljs-built_in">Object</span>.prototype.toString.call(arg) === <span class="hljs-string">'[object Array]'</span>;
         },
+        isNodeList = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">arg</span>) </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.prototype.toString.call(arg) === <span class="hljs-string">'[object NodeList]'</span>;
+        },
         stringIsRegExp = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">string</span>) </span>{
             <span class="hljs-keyword">return</span> <span class="hljs-regexp">/^\/(?:\S|\s)*\/[gimy]{0,4}$/</span>.test(string);
         },
@@ -337,7 +340,7 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
                 <span class="hljs-keyword">var</span> output;
                 <span class="hljs-keyword">if</span> (isString(input)) {
                     output = input ? <span class="hljs-built_in">String</span>.prototype.slice.apply(input, args) : <span class="hljs-literal">null</span>;
-                } <span class="hljs-keyword">else</span> {</pre></div></div>
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (isArray(input) || isNodeList(input)){</pre></div></div>
             
         </li>
         
@@ -395,7 +398,7 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
     <span class="hljs-keyword">var</span> arrayTransformations = {
         map: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">method</span>) </span>{
             <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">array</span>) </span>{
-                <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>.prototype.map.call(array, method);
+                <span class="hljs-keyword">return</span> isArray(array) || isNodeList(array) ? <span class="hljs-built_in">Array</span>.prototype.map.call(array, method) : <span class="hljs-literal">null</span>;
             };
         }
     };</pre></div></div>
@@ -599,7 +602,7 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
         <span class="hljs-keyword">return</span> args;
     };
 
-    Composable.VERSION = <span class="hljs-string">'0.4.2'</span>;</pre></div></div>
+    Composable.VERSION = <span class="hljs-string">'0.4.3'</span>;</pre></div></div>
             
         </li>
         

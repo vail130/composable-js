@@ -103,6 +103,18 @@ describe('Composable', function () {
             });
             expect(extractedData.a).toEqual([1, 2, 3, 4]);
         });
+
+        it('should run map and return null on null', function () {
+            var extractedData = Composable({
+                a: [
+                    'document',
+                    'querySelector:#not-here',
+                    'querySelectorAll:.not-here-either',
+                    'map:value'
+                ]
+            });
+            expect(extractedData.a).toEqual(null);
+        });
     });
 
     describe('getTransformation', function () {
