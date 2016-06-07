@@ -11,6 +11,18 @@ describe('Composable', function () {
         delete window.testData;
     });
 
+    it('should replace with empty', function () {
+        var extractedData = Composable({
+            a: [
+                'document',
+                'querySelector:#test-div1',
+                'innerText',
+                'replace:/./g,'
+            ]
+        });
+        expect(extractedData.a).toEqual('');
+    });
+
     it('should select child node and match part of inner text and parses as int', function () {
         var extractedData = Composable({
             a: [

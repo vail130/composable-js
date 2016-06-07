@@ -198,7 +198,7 @@
                 var output;
                 if (isString(input)) {
                     output = input ? String.prototype.slice.apply(input, args) : null;
-                } else if (isArray(input) || isNodeList(input)){
+                } else if (isArray(input) || isNodeList(input)) {
                     // Slice needs to work on NodeList instances
                     output = input ? Array.prototype.slice.apply(input, args) : null;
                 }
@@ -365,16 +365,15 @@
 
             var lengthOfRegexWithComma = argRegexMatch[0].length;
             string = string.slice(lengthOfRegexWithComma);
-        }
-
-        if (string.length) {
+            args = args.concat(string.split(','));
+        } else if (string.length) {
             args = args.concat(string.split(','));
         }
 
         return args;
     };
 
-    Composable.VERSION = '0.4.3';
+    Composable.VERSION = '0.4.4';
 
     // Make the object globally accessible
     root.Composable = Composable;
