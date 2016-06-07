@@ -340,7 +340,7 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
                 <span class="hljs-keyword">var</span> output;
                 <span class="hljs-keyword">if</span> (isString(input)) {
                     output = input ? <span class="hljs-built_in">String</span>.prototype.slice.apply(input, args) : <span class="hljs-literal">null</span>;
-                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (isArray(input) || isNodeList(input)){</pre></div></div>
+                } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (isArray(input) || isNodeList(input)) {</pre></div></div>
             
         </li>
         
@@ -593,16 +593,15 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
 
             <span class="hljs-keyword">var</span> lengthOfRegexWithComma = argRegexMatch[<span class="hljs-number">0</span>].length;
             string = string.slice(lengthOfRegexWithComma);
-        }
-
-        <span class="hljs-keyword">if</span> (string.length) {
+            args = args.concat(string.split(<span class="hljs-string">','</span>));
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (string.length) {
             args = args.concat(string.split(<span class="hljs-string">','</span>));
         }
 
         <span class="hljs-keyword">return</span> args;
     };
 
-    Composable.VERSION = <span class="hljs-string">'0.4.3'</span>;</pre></div></div>
+    Composable.VERSION = <span class="hljs-string">'0.4.4'</span>;</pre></div></div>
             
         </li>
         
