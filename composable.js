@@ -139,7 +139,8 @@
         htmlToText: function (html) {
             var div = root.document.createElement('div');
             div.innerHTML = html;
-            return div.firstChild.nodeValue + String();
+            var firstChild = div.firstChild;
+            return firstChild ? firstChild.nodeValue + String() : '';
         },
         reverse: function (item) {
             if (isString(item)) {
@@ -373,7 +374,7 @@
         return args;
     };
 
-    Composable.VERSION = '0.4.4';
+    Composable.VERSION = '0.4.5';
 
     // Make the object globally accessible
     root.Composable = Composable;

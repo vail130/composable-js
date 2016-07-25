@@ -217,6 +217,10 @@ describe('Composable', function () {
             expect(Composable.T.htmlToText('&amp;')).toEqual('&');
         });
 
+        it('should run htmlToText on empty value', function () {
+            expect(Composable.T.htmlToText('')).toEqual('');
+        });
+
         it('should run innerText', function () {
             expect(Composable.T.innerText(document.querySelector('.test-inner-text'))).toEqual('Root Text\nSub Text\n');
         });
