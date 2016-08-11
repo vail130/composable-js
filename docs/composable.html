@@ -244,6 +244,12 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
         toFloat: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">item</span>) </span>{
             <span class="hljs-keyword">return</span> isString(item) || isNumber(item) ? <span class="hljs-built_in">parseFloat</span>(item) : <span class="hljs-literal">null</span>;
         },
+        toFixed: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">item</span>) </span>{
+            <span class="hljs-keyword">var</span> float = isString(item) ? <span class="hljs-built_in">parseFloat</span>(item) : item;
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">precision</span>) </span>{
+                <span class="hljs-keyword">return</span> isNumber(float) ? float.toFixed(precision) : <span class="hljs-literal">null</span>;
+            };
+        },
         round: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">item</span>) </span>{
             <span class="hljs-keyword">return</span> isNumber(item) ? <span class="hljs-built_in">Math</span>.round(item) : <span class="hljs-literal">null</span>;
         },
@@ -601,7 +607,7 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
         <span class="hljs-keyword">return</span> args;
     };
 
-    Composable.VERSION = <span class="hljs-string">'0.4.4'</span>;</pre></div></div>
+    Composable.VERSION = <span class="hljs-string">'0.4.5'</span>;</pre></div></div>
             
         </li>
         
