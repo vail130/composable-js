@@ -126,6 +126,12 @@
         toFloat: function (item) {
             return isString(item) || isNumber(item) ? parseFloat(item) : null;
         },
+        toFixed: function (item) {
+            var float = isString(item) ? parseFloat(item) : item;
+            return function (precision) {
+                return isNumber(float) ? float.toFixed(precision) : null;
+            };
+        },
         round: function (item) {
             return isNumber(item) ? Math.round(item) : null;
         },
@@ -373,7 +379,7 @@
         return args;
     };
 
-    Composable.VERSION = '0.4.4';
+    Composable.VERSION = '0.4.5';
 
     // Make the object globally accessible
     root.Composable = Composable;

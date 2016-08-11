@@ -203,6 +203,17 @@ describe('Composable', function () {
             expect(Composable.T.toInt('12')).toEqual(12);
         });
 
+        describe('toFixed', function () {
+            it('should default to 0', function () {
+                expect(Composable.T.toFixed(1.234)()).toEqual('1');
+            });
+
+            it('should return fixed string at given precision', function () {
+                expect(Composable.T.toFixed(4.123)(5)).toEqual('4.12300');
+                expect(Composable.T.toFixed('4.12345')(3)).toEqual('4.123');
+            });
+        });
+
         it('should run round', function () {
             expect(Composable.T.round(12.34)).toEqual(12);
             expect(Composable.T.round(12.54)).toEqual(13);
