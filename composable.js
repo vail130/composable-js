@@ -145,7 +145,8 @@
         htmlToText: function (html) {
             var div = root.document.createElement('div');
             div.innerHTML = html;
-            return div.firstChild.nodeValue + String();
+            var firstChild = div.firstChild;
+            return firstChild ? firstChild.nodeValue + String() : '';
         },
         reverse: function (item) {
             if (isString(item)) {
