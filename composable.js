@@ -81,6 +81,17 @@
         document: function () {
             return root.document;
         },
+        location: function () {
+          return root.location;
+        },
+
+        // Location transformations
+        href: function () {
+          return node ? node.href : null;
+        },
+        pathname: function () {
+          return node ? node.pathname : null;
+        },
 
         // DOM node transformations
         querySelectorAll: function (selector) {
@@ -125,6 +136,12 @@
         },
         toFloat: function (item) {
             return isString(item) || isNumber(item) ? parseFloat(item) : null;
+        },
+        toFixed: function (item) {
+            var float = isString(item) ? parseFloat(item) : item;
+            return function (precision) {
+                return isNumber(float) ? float.toFixed(precision) : null;
+            };
         },
         round: function (item) {
             return isNumber(item) ? Math.round(item) : null;
