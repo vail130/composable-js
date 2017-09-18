@@ -194,6 +194,18 @@ describe('Composable', function () {
             expect(Composable.T.document()).toEqual(document);
         });
 
+        it('should get location', function () {
+            expect(Composable.T.location()).toEqual(window.location);
+        });
+
+        it('should get href', function () {
+            expect(Composable.T.href()).toEqual(window.location.href);
+        });
+
+        it('should get pathname', function () {
+            expect(Composable.T.pathname()).toEqual(window.location.pathname);
+        });
+
         it('should run toFloat', function () {
             expect(Composable.T.toFloat('12.34')).toEqual(12.34);
         });
