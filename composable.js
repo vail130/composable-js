@@ -81,6 +81,17 @@
         document: function () {
             return root.document;
         },
+        location: function () {
+          return root.location;
+        },
+
+        // Location transformations
+        href: function () {
+          return node ? node.href : null;
+        },
+        pathname: function () {
+          return node ? node.pathname : null;
+        },
 
         // DOM node transformations
         querySelectorAll: function (selector) {
