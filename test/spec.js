@@ -194,6 +194,18 @@ describe('Composable', function () {
             expect(Composable.T.document()).toEqual(document);
         });
 
+        it('should get location', function () {
+            expect(Composable.T.location()).toEqual(window.location);
+        });
+
+        it('should get href', function () {
+            expect(Composable.T.href()).toEqual(window.location.href);
+        });
+
+        it('should get pathname', function () {
+            expect(Composable.T.pathname()).toEqual(window.location.pathname);
+        });
+
         it('should run toFloat', function () {
             expect(Composable.T.toFloat('12.34')).toEqual(12.34);
         });
@@ -201,6 +213,17 @@ describe('Composable', function () {
         it('should run toInt', function () {
             expect(Composable.T.toInt('12.34')).toEqual(12);
             expect(Composable.T.toInt('12')).toEqual(12);
+        });
+
+        describe('toFixed', function () {
+            it('should default to 0', function () {
+                expect(Composable.T.toFixed(1.234)()).toEqual('1');
+            });
+
+            it('should return fixed string at given precision', function () {
+                expect(Composable.T.toFixed(4.123)(5)).toEqual('4.12300');
+                expect(Composable.T.toFixed('4.12345')(3)).toEqual('4.123');
+            });
         });
 
         it('should run round', function () {
@@ -223,6 +246,10 @@ describe('Composable', function () {
 
         it('should run innerText', function () {
             expect(Composable.T.innerText(document.querySelector('.test-inner-text'))).toEqual('Root Text\nSub Text\n');
+        });
+
+        it('should run outerHTML', function () {
+            expect(Composable.T.outerHTML(document.querySelector('.test-match'))).toEqual('<div class="test-match">match</div>');
         });
 
         it('should run rootInnerText', function () {
