@@ -248,6 +248,10 @@ describe('Composable', function () {
             expect(Composable.T.innerText(document.querySelector('.test-inner-text'))).toEqual('Root Text\nSub Text\n');
         });
 
+        it('should run outerHTML', function () {
+            expect(Composable.T.outerHTML(document.querySelector('.test-match'))).toEqual('<div class="test-match">match</div>');
+        });
+
         it('should run rootInnerText', function () {
             expect(Composable.T.rootInnerText(
                 document.querySelector('.test-root-inner-text'))
