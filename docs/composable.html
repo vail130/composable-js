@@ -225,6 +225,9 @@ We use <code>self</code> instead of <code>window</code> for <code>WebWorker</cod
         <span class="hljs-attr">innerHTML</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">node</span>) </span>{
             <span class="hljs-keyword">return</span> node ? node.innerHTML : <span class="hljs-literal">null</span>;
         },
+        <span class="hljs-attr">outerHTML</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">node</span>) </span>{
+            <span class="hljs-keyword">return</span> node ? node.outerHTML : <span class="hljs-literal">null</span>;
+        },
         <span class="hljs-attr">innerText</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">node</span>) </span>{
             <span class="hljs-keyword">return</span> node ? node.innerText || node.textContent : <span class="hljs-literal">null</span>;
         },

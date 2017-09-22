@@ -107,6 +107,9 @@
         innerHTML: function (node) {
             return node ? node.innerHTML : null;
         },
+        outerHTML: function (node) {
+            return node ? node.outerHTML : null;
+        },
         innerText: function (node) {
             return node ? node.innerText || node.textContent : null;
         },
